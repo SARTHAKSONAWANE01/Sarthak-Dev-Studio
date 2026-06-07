@@ -65,7 +65,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
                 backgroundSize: "200% 200%"
               }}
             >
-              DevSarth
+              Sarthak Dev Studio
             </motion.h1>
             
             {/* Loading spinner */}
