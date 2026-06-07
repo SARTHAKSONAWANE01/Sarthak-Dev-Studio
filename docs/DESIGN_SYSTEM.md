@@ -32,3 +32,8 @@ This document details the visual rules, layout guidelines, and animation systems
 - Staggered entry animation triggers.
 - Magnetic spring CTAs.
 
+### Navigation Bar
+- Sticky top header overlay.
+- High-contrast links with thin bottom underline slides.
+- Monochrome route indicators.
+
