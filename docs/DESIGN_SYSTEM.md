@@ -37,3 +37,7 @@ This document details the visual rules, layout guidelines, and animation systems
 - High-contrast links with thin bottom underline slides.
 - Monochrome route indicators.
 
+### Selected Work List
+- Rows separated by 1px hairlines.
+- Interactive text shift (8px x-translate) and arrow rotate/slide on group hover.
+
