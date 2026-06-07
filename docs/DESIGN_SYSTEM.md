@@ -9,3 +9,8 @@ This document details the visual rules, layout guidelines, and animation systems
 - **Secondary**: `#555555` (Neutral Grey)
 - **Muted**: `#999999` (Light Grey)
 
+## Typography Scale
+
+- **Serif Font**: `Instrument Serif` (for editorial display headings)
+- **Sans-Serif Font**: `Inter` (for clean body text, navigation elements, and captions)
+
