@@ -25,3 +25,10 @@ This document details the visual rules, layout guidelines, and animation systems
 - **Ease Curve**: Custom bezier `cubic-bezier(0.16, 1, 0.3, 1)` (Luxury ease-out)
 - **Springs**: High stiffness, damp-loaded custom spring transforms for micro-interactions.
 
+## Components
+
+### Hero Section
+- Editorial time-based greeting.
+- Staggered entry animation triggers.
+- Magnetic spring CTAs.
+
