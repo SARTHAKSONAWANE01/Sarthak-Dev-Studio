@@ -55,10 +55,14 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="font-serif text-lg md:text-xl tracking-tight hover:opacity-60 transition-opacity"
-            style={{ color: "var(--foreground)" }}
+            className="hover:opacity-60 transition-opacity flex items-center h-8 md:h-10"
           >
-            Sarthak Dev Studio
+            <img
+              src="/logo.png"
+              alt="Sarthak Dev Studio"
+              className="h-full w-auto object-contain"
+              style={{ maxHeight: "100%" }}
+            />
           </Link>
 
           {/* Desktop Nav */}
