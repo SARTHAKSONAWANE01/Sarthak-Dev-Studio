@@ -14,3 +14,9 @@ This document details the visual rules, layout guidelines, and animation systems
 - **Serif Font**: `Instrument Serif` (for editorial display headings)
 - **Sans-Serif Font**: `Inter` (for clean body text, navigation elements, and captions)
 
+## Layout & Grids
+
+- **Max Width**: 1200px (standard grid container)
+- **Wide Width**: 1440px (wide layouts)
+- **Section Spacing**: Fluid clamp `clamp(80px, 12vw, 160px)` for premium spatial pacing.
+
