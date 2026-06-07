@@ -41,3 +41,7 @@ This document details the visual rules, layout guidelines, and animation systems
 - Rows separated by 1px hairlines.
 - Interactive text shift (8px x-translate) and arrow rotate/slide on group hover.
 
+### Building Now Grid
+- Two-column clean list layout.
+- Small pulsing green/black dot indicators to show live active learning and work.
+
