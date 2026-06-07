@@ -45,3 +45,7 @@ This document details the visual rules, layout guidelines, and animation systems
 - Two-column clean list layout.
 - Small pulsing green/black dot indicators to show live active learning and work.
 
+### Proof Section
+- Five-column grid displaying key learning and build statistics.
+- Thin border separators matching design bounds.
+
