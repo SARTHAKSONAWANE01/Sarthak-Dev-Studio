@@ -20,3 +20,8 @@ This document details the visual rules, layout guidelines, and animation systems
 - **Wide Width**: 1440px (wide layouts)
 - **Section Spacing**: Fluid clamp `clamp(80px, 12vw, 160px)` for premium spatial pacing.
 
+## Transitions & Motion
+
+- **Ease Curve**: Custom bezier `cubic-bezier(0.16, 1, 0.3, 1)` (Luxury ease-out)
+- **Springs**: High stiffness, damp-loaded custom spring transforms for micro-interactions.
+
