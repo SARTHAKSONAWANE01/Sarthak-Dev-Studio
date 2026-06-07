@@ -52,3 +52,7 @@ This document details the visual rules, layout guidelines, and animation systems
 ### Philosophy Section
 - Large layout blocks showcasing quotes and editorial thinking on development.
 
+### Connect Links
+- Clear contact triggers.
+- Arrow indicators that shift diagonal on hover.
+
