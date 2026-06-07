@@ -56,3 +56,7 @@ This document details the visual rules, layout guidelines, and animation systems
 - Clear contact triggers.
 - Arrow indicators that shift diagonal on hover.
 
+## Route Guidelines
+- Clean Page transitions via Framer Motion.
+- Strict monochrome 404, contact, resume, and detail pages.
+
