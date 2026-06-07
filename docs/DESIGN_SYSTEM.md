@@ -49,3 +49,6 @@ This document details the visual rules, layout guidelines, and animation systems
 - Five-column grid displaying key learning and build statistics.
 - Thin border separators matching design bounds.
 
+### Philosophy Section
+- Large layout blocks showcasing quotes and editorial thinking on development.
+
