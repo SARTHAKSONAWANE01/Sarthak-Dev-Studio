@@ -228,7 +228,7 @@ export const projects: Project[] = [
     role: "Designer & Developer",
     teamSize: "Solo",
     timeline: "4 weeks",
-    liveUrl: "https://thegyost.netlify.app",
+    liveUrl: "https://raibyrai.freedev.app/",
     githubUrl: "https://github.com/SARTHAKSONAWANE01/RaibyRai-Real-Estate-Advisory",
     techStack: [
       "HTML5",
