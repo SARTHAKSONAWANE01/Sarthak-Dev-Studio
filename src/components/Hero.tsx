@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
@@ -17,6 +17,172 @@ const roles = [
   "Problem Solver.",
   "Future Founder.",
 ];
+
+function TechBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    // Assembly instructions, binary, and server commands
+    const techSnippets = [
+      "MOV EAX, 0x10",
+      "ADD ESP, 8",
+      "PUSH EBP",
+      "MOV EBP, ESP",
+      "SUB ESP, 0x20",
+      "CMP EAX, EBX",
+      "JMP SHORT 0x04",
+      "XOR EAX, EAX",
+      "RET",
+      "01101100",
+      "01101111",
+      "01110110",
+      "01100101",
+      "CALL _init",
+      "PUSH RAX",
+      "POP RCX",
+      "SYSCALL",
+      "PUSH RDI",
+      "MOV RDI, RDX",
+      "LEA RAX, [RSP+8]",
+      "JE .L3",
+      "NOP",
+      "01000001",
+      "01010100",
+      "git commit -m 'feat'",
+      "npm run build",
+      "HTTP/1.1 200 OK",
+      "GET /api/contact",
+      "ssh main@server",
+    ];
+
+    // Initialize particles
+    const particles: Array<{
+      x: number;
+      y: number;
+      text: string;
+      speed: number;
+      fontSize: number;
+      opacity: number;
+    }> = [];
+
+    const numParticles = 45;
+    for (let i = 0; i < numParticles; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        text: techSnippets[Math.floor(Math.random() * techSnippets.length)],
+        speed: 0.15 + Math.random() * 0.4,
+        fontSize: 10 + Math.floor(Math.random() * 5),
+        opacity: 0.01 + Math.random() * 0.04,
+      });
+    }
+
+    // Circuit grid lines layout
+    const gridSpacing = 100;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. Draw very faint background grid
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.015)";
+      ctx.lineWidth = 1;
+      for (let x = 0; x < width; x += gridSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += gridSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // 2. Draw drifting tech snippets
+      particles.forEach((p) => {
+        ctx.fillStyle = `rgba(0, 0, 0, ${p.opacity})`;
+        ctx.font = `${p.fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+        ctx.fillText(p.text, p.x, p.y);
+
+        // Move particle up (slow drift)
+        p.y -= p.speed;
+
+        // Reset particle if it goes off screen
+        if (p.y < -30) {
+          p.y = height + 30;
+          p.x = Math.random() * width;
+          p.text = techSnippets[Math.floor(Math.random() * techSnippets.length)];
+          p.opacity = 0.01 + Math.random() * 0.04;
+        }
+      });
+
+      // 3. Draw subtle glowing circuit path lines
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.02)";
+      ctx.lineWidth = 1.5;
+      
+      // Left side circuit
+      ctx.beginPath();
+      ctx.moveTo(width * 0.08, height * 0.25);
+      ctx.lineTo(width * 0.18, height * 0.25);
+      ctx.lineTo(width * 0.22, height * 0.35);
+      ctx.lineTo(width * 0.22, height * 0.65);
+      ctx.stroke();
+
+      // Node dot
+      ctx.fillStyle = "rgba(0, 0, 0, 0.035)";
+      ctx.beginPath();
+      ctx.arc(width * 0.22, height * 0.65, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Right side circuit
+      ctx.beginPath();
+      ctx.moveTo(width * 0.92, height * 0.75);
+      ctx.lineTo(width * 0.82, height * 0.75);
+      ctx.lineTo(width * 0.78, height * 0.65);
+      ctx.lineTo(width * 0.78, height * 0.35);
+      ctx.stroke();
+
+      // Node dot
+      ctx.beginPath();
+      ctx.arc(width * 0.78, height * 0.35, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none z-0"
+    />
+  );
+}
 
 export default function Hero() {
   const [greeting, setGreeting] = useState("Hello");
@@ -78,8 +244,11 @@ export default function Hero() {
     >
       {/* Animated Grid Background */}
       <div className="hero-grid-bg" aria-hidden="true" />
+      
+      {/* High-fidelity Tech Background Canvas */}
+      <TechBackground />
 
-      <div className="container-studio relative z-10">
+      <div className="max-w-[1440px] w-full mx-auto px-6 md:px-12 relative z-10">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -94,12 +263,23 @@ export default function Hero() {
               <div className="section-index !mb-0">01 — Introduction</div>
               <span className="text-xs uppercase tracking-widest font-mono opacity-40">Sarthak Dev Studio</span>
             </div>
-
+            
+            {/* Tech Status Panel */}
+            <div className="hidden lg:flex items-center gap-4 text-3xs font-mono border border-foreground/5 py-1.5 px-3 bg-foreground/[0.01] rounded uppercase tracking-wider text-foreground-muted">
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span>Node: Online</span>
+              </div>
+              <div className="w-px h-3 bg-foreground/10" />
+              <span>Pune, IN</span>
+              <div className="w-px h-3 bg-foreground/10" />
+              <span>Studio: v2.8</span>
+            </div>
           </motion.div>
 
           {/* Greeting */}
           <motion.p
-            className="text-base md:text-lg mb-6"
+            className="text-base md:text-lg mb-6 font-mono opacity-80"
             style={{ color: "var(--foreground-secondary)" }}
             variants={itemVariants}
           >
@@ -107,7 +287,7 @@ export default function Hero() {
           </motion.p>
 
           {/* Main Headline — letter-by-letter */}
-          <div className="max-w-5xl">
+          <div className="max-w-6xl">
             <motion.h1
               className="text-display mb-4"
               initial="hidden"
@@ -146,7 +326,7 @@ export default function Hero() {
             </div>
 
             <motion.p
-              className="text-xl md:text-2xl max-w-2xl mb-12 leading-relaxed"
+              className="text-xl md:text-2xl max-w-3xl mb-12 leading-relaxed"
               style={{ color: "var(--foreground-muted)" }}
               variants={itemVariants}
             >
@@ -204,8 +384,10 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 0.8 }}
       >
-
-        <motion.div
+        <span className="text-3xs uppercase tracking-widest font-mono text-foreground-muted group-hover:text-foreground transition-colors">
+          Scroll Down
+        </span>
+        <motion.div 
           className="w-8 h-8 rounded-full border border-foreground/10 flex items-center justify-center group-hover:border-foreground/30 transition-colors"
           whileHover={{ y: 2 }}
         >
@@ -220,8 +402,8 @@ export default function Hero() {
             strokeLinejoin="round"
             className="text-foreground-secondary"
           >
-            <path d="M12 5v14" />
-            <path d="m19 12-7 7-7-7" />
+            <path d="M12 5v14"/>
+            <path d="m19 12-7 7-7-7"/>
           </svg>
         </motion.div>
       </motion.button>
