@@ -39,7 +39,6 @@ function TechBackground() {
       if (!canvas) return;
       const newWidth = window.innerWidth;
       const newHeight = window.innerHeight;
-      // Only resize if width changes or height changes significantly (e.g. keyb/url bar toggle on mobile)
       if (newWidth !== lastWidth || Math.abs(newHeight - lastHeight) > 100) {
         width = canvas.width = newWidth;
         height = canvas.height = newHeight;
@@ -48,6 +47,19 @@ function TechBackground() {
       }
     };
     window.addEventListener("resize", handleResize);
+
+    // Track mouse coordinates for avoidance force
+    const mouse = { x: -1000, y: -1000 };
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+    const handleMouseLeave = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseleave", handleMouseLeave);
 
     // Assembly instructions, binary, server commands, and modern code elements
     const techSnippets = [
@@ -115,40 +127,42 @@ function TechBackground() {
       return { r: 0, g: 0, b: 0 };
     };
 
-    // Initialize particles
+    // Initialize particles with velocity state
     const particles: Array<{
       x: number;
       y: number;
       text: string;
-      speed: number;
+      speedY: number;
+      vx: number;
+      vy: number;
       fontSize: number;
       opacity: number;
     }> = [];
 
-    const numParticles = 90; // Increased particle density
+    const numParticles = 38; // Diminished particle density for a minimal approach
     for (let i = 0; i < numParticles; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
         text: techSnippets[Math.floor(Math.random() * techSnippets.length)],
-        speed: 0.12 + Math.random() * 0.35, // Slightly slower, smoother drift
-        fontSize: 11 + Math.floor(Math.random() * 6), // Slightly larger font size
-        opacity: 0.08 + Math.random() * 0.16, // Significantly increased opacity range
+        speedY: 0.1 + Math.random() * 0.2, // Slower, subtle drift speed
+        vx: 0,
+        vy: 0,
+        fontSize: 10 + Math.floor(Math.random() * 5), // Slightly smaller font size
+        opacity: 0.03 + Math.random() * 0.04, // Extremely low opacity range
       });
     }
 
-    // Circuit grid lines layout
-    const gridSpacing = 100;
+    const gridSpacing = 120;
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Adapt colors dynamically to page foreground/theme
       const themeColor = getThemeColor();
       const rgbStr = `${themeColor.r}, ${themeColor.g}, ${themeColor.b}`;
 
-      // 1. Draw very faint background grid
-      ctx.strokeStyle = `rgba(${rgbStr}, 0.05)`; // Faint grid lines
+      // 1. Draw ultra-faint background grid
+      ctx.strokeStyle = `rgba(${rgbStr}, 0.02)`; // Fainter grid lines
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += gridSpacing) {
         ctx.beginPath();
@@ -163,27 +177,51 @@ function TechBackground() {
         ctx.stroke();
       }
 
-      // 2. Draw drifting tech snippets
+      // 2. Draw mouse-interactive drifting tech snippets
       particles.forEach((p) => {
         ctx.fillStyle = `rgba(${rgbStr}, ${p.opacity})`;
         ctx.font = `${p.fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
         ctx.fillText(p.text, p.x, p.y);
 
-        // Move particle up (slow drift)
-        p.y -= p.speed;
+        // Calculate distance to cursor
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const radius = 130; // Push radius
 
-        // Reset particle if it goes off screen
+        if (dist < radius) {
+          const force = (radius - dist) / radius;
+          const angle = Math.atan2(dy, dx);
+          // Gently accelerate away from cursor
+          p.vx += Math.cos(angle) * force * 0.5;
+          p.vy += Math.sin(angle) * force * 0.5;
+        }
+
+        // Apply friction to velocities
+        p.vx *= 0.94;
+        p.vy *= 0.94;
+
+        // Apply velocities and drift speed
+        p.x += p.vx;
+        p.y += p.vy - p.speedY;
+
+        // Wrap around screen boundaries
         if (p.y < -30) {
           p.y = height + 30;
           p.x = Math.random() * width;
-          p.text = techSnippets[Math.floor(Math.random() * techSnippets.length)];
-          p.opacity = 0.08 + Math.random() * 0.16;
+          p.vx = 0;
+          p.vy = 0;
+        }
+        if (p.x < -100) {
+          p.x = width + 100;
+        } else if (p.x > width + 100) {
+          p.x = -100;
         }
       });
 
-      // 3. Draw subtle glowing circuit path lines
-      ctx.strokeStyle = `rgba(${rgbStr}, 0.15)`; // Increased visibility for circuit lines
-      ctx.lineWidth = 1.5;
+      // 3. Draw very faint circuit path lines
+      ctx.strokeStyle = `rgba(${rgbStr}, 0.05)`; // Dimmed circuit lines
+      ctx.lineWidth = 1.2;
 
       // Left side circuit
       ctx.beginPath();
@@ -194,9 +232,9 @@ function TechBackground() {
       ctx.stroke();
 
       // Node dot
-      ctx.fillStyle = `rgba(${rgbStr}, 0.25)`; // Increased visibility for dots
+      ctx.fillStyle = `rgba(${rgbStr}, 0.08)`; // Fainter dots
       ctx.beginPath();
-      ctx.arc(width * 0.22, height * 0.65, 3.5, 0, Math.PI * 2);
+      ctx.arc(width * 0.22, height * 0.65, 3, 0, Math.PI * 2);
       ctx.fill();
 
       // Right side circuit
@@ -209,7 +247,7 @@ function TechBackground() {
 
       // Node dot
       ctx.beginPath();
-      ctx.arc(width * 0.78, height * 0.35, 3.5, 0, Math.PI * 2);
+      ctx.arc(width * 0.78, height * 0.35, 3, 0, Math.PI * 2);
       ctx.fill();
 
       animationFrameId = requestAnimationFrame(draw);
@@ -219,6 +257,8 @@ function TechBackground() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
