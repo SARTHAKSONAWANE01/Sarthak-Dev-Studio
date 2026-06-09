@@ -114,6 +114,16 @@ export default function SelectedWork() {
                       >
                         {project.title}
                       </motion.h3>
+                      {/* Mobile Image Preview */}
+                      {projectImages[project.slug] && (
+                        <div className="block lg:hidden w-full aspect-video rounded border border-foreground/5 overflow-hidden mb-4 relative">
+                          <img
+                            src={projectImages[project.slug]}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
                       {/* Tech Tags */}
                       <div className="flex flex-wrap gap-1.5">
                         {project.techStack.slice(0, 4).map((tech) => (

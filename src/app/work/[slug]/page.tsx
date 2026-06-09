@@ -92,9 +92,24 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               <div className="text-xs font-mono uppercase tracking-widest text-foreground-muted mb-3">
                 {project.category}
               </div>
-              <h1 className="text-display mb-6 max-w-4xl tracking-tight font-serif leading-none">
-                {project.title}
-              </h1>
+              <div className="flex flex-wrap items-baseline gap-x-4 md:gap-x-6 gap-y-2 mb-6">
+                <h1 className="text-display tracking-tight font-serif leading-none">
+                  {project.title}
+                </h1>
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-foreground/60 hover:text-foreground border border-foreground/15 px-3 py-1.5 rounded bg-foreground/[0.02] hover:bg-foreground/[0.06] transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
+                  >
+                    <span>Visit Live Site</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
               <p
                 className="text-xl md:text-2xl max-w-3xl leading-relaxed font-serif"
                 style={{ color: "var(--foreground-secondary)" }}

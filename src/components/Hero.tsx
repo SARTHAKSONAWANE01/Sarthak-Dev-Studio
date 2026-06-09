@@ -82,7 +82,7 @@ function TechBackground() {
       opacity: number;
     }> = [];
 
-    const numParticles = 45;
+    const numParticles = 75;
     for (let i = 0; i < numParticles; i++) {
       particles.push({
         x: Math.random() * width,
@@ -90,7 +90,7 @@ function TechBackground() {
         text: techSnippets[Math.floor(Math.random() * techSnippets.length)],
         speed: 0.15 + Math.random() * 0.4,
         fontSize: 10 + Math.floor(Math.random() * 5),
-        opacity: 0.01 + Math.random() * 0.04,
+        opacity: 0.04 + Math.random() * 0.08,
       });
     }
 
@@ -101,7 +101,7 @@ function TechBackground() {
       ctx.clearRect(0, 0, width, height);
 
       // 1. Draw very faint background grid
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.015)";
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.035)";
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += gridSpacing) {
         ctx.beginPath();
@@ -130,12 +130,12 @@ function TechBackground() {
           p.y = height + 30;
           p.x = Math.random() * width;
           p.text = techSnippets[Math.floor(Math.random() * techSnippets.length)];
-          p.opacity = 0.01 + Math.random() * 0.04;
+          p.opacity = 0.04 + Math.random() * 0.08;
         }
       });
 
       // 3. Draw subtle glowing circuit path lines
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.02)";
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.05)";
       ctx.lineWidth = 1.5;
       
       // Left side circuit
@@ -147,7 +147,7 @@ function TechBackground() {
       ctx.stroke();
 
       // Node dot
-      ctx.fillStyle = "rgba(0, 0, 0, 0.035)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.09)";
       ctx.beginPath();
       ctx.arc(width * 0.22, height * 0.65, 3.5, 0, Math.PI * 2);
       ctx.fill();
@@ -256,25 +256,11 @@ export default function Hero() {
         >
           {/* Availability Badge + Section Index */}
           <motion.div
-            className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-8 justify-between border-b border-foreground/5 pb-6"
+            className="flex items-center gap-3 sm:gap-6 mb-8 border-b border-foreground/5 pb-6"
             variants={itemVariants}
           >
-            <div className="flex items-center gap-3 sm:gap-6">
-              <div className="section-index !mb-0">01 — Introduction</div>
-              <span className="text-xs uppercase tracking-widest font-mono opacity-40">Sarthak Dev Studio</span>
-            </div>
-            
-            {/* Tech Status Panel */}
-            <div className="hidden lg:flex items-center gap-4 text-3xs font-mono border border-foreground/5 py-1.5 px-3 bg-foreground/[0.01] rounded uppercase tracking-wider text-foreground-muted">
-              <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span>Node: Online</span>
-              </div>
-              <div className="w-px h-3 bg-foreground/10" />
-              <span>Pune, IN</span>
-              <div className="w-px h-3 bg-foreground/10" />
-              <span>Studio: v2.8</span>
-            </div>
+            <div className="section-index !mb-0">01 — Introduction</div>
+            <span className="text-xs uppercase tracking-widest font-mono opacity-40">Sarthak Dev Studio</span>
           </motion.div>
 
           {/* Greeting */}
