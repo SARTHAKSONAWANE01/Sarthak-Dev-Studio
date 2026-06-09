@@ -25,13 +25,14 @@ export default function ConnectPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    inquiryType: "MVP Development",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -48,29 +49,43 @@ export default function ConnectPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/contact", {
+      // 1. Log / Save via local API
+      await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: `[Inquiry Type: ${formData.inquiryType}] ${formData.message}`
+        }),
       });
 
-      const result = await response.json();
+      // 2. Build mailto redirection
+      const mailtoSubject = encodeURIComponent(`[Inquiry] ${formData.inquiryType} - ${formData.name}`);
+      const mailtoBody = encodeURIComponent(
+        `Sarthak Dev Studio - Contact Inquiry\n` +
+        `=====================================\n\n` +
+        `Name: ${formData.name}\n` +
+        `Email: ${formData.email}\n` +
+        `Engagement Type: ${formData.inquiryType}\n\n` +
+        `Message:\n${formData.message}\n\n` +
+        `-------------------------------------\n` +
+        `Sent via Sarthak Dev Studio`
+      );
+      const mailtoUrl = `mailto:bitdexp@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`;
+      
+      // 3. Trigger email client
+      window.location.href = mailtoUrl;
 
-      if (response.ok) {
-        toast({
-          title: "Message sent.",
-          description: "Thank you. I'll get back to you shortly.",
-        });
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        toast({
-          title: "Error",
-          description: result.error || "Something went wrong.",
-          variant: "destructive",
-        });
-      }
+      // 4. Reset form
+      setFormData({ name: "", email: "", inquiryType: "MVP Development", message: "" });
+      
+      toast({
+        title: "Mail App Opened",
+        description: "Your formatted inquiry has been sent to your email client.",
+      });
     } catch (error) {
       toast({
         title: "Error",
@@ -85,7 +100,7 @@ export default function ConnectPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-28 md:pt-36 pb-24">
+      <main className="pt-28 md:pt-36 pb-24 bg-white text-black">
         <div className="container-studio">
           {/* Header */}
           <div className="max-w-4xl mb-16 md:mb-24">
@@ -97,7 +112,7 @@ export default function ConnectPage() {
                 <span className="text-editorial">shop.</span>
               </h1>
               <p
-                className="text-xl md:text-2xl leading-relaxed"
+                className="text-xl md:text-2xl leading-relaxed font-serif"
                 style={{ color: "var(--foreground-secondary)" }}
               >
                 Reach out to schedule a consultation, discuss team roles, or request a technical review of your project.
@@ -117,7 +132,7 @@ export default function ConnectPage() {
                         <h3 className="text-sm font-mono uppercase tracking-wider text-foreground mb-1">
                           {opt.type}
                         </h3>
-                        <p className="text-xs leading-relaxed" style={{ color: "var(--foreground-secondary)" }}>
+                        <p className="text-xs leading-relaxed text-foreground-secondary">
                           {opt.details}
                         </p>
                       </div>
@@ -136,7 +151,7 @@ export default function ConnectPage() {
                       <span className="text-sm font-medium">sonawanesarthak00@gmail.com</span>
                       <button
                         onClick={handleCopy}
-                        className="px-2 py-0.5 text-3xs uppercase tracking-widest border border-foreground/10 hover:border-foreground/30 rounded bg-background transition-colors text-foreground-muted"
+                        className="px-2 py-0.5 text-3xs uppercase tracking-widest border border-foreground/10 hover:border-foreground/30 rounded bg-background transition-colors text-foreground-muted cursor-pointer"
                       >
                         {copied ? "Copied!" : "Copy"}
                       </button>
@@ -188,7 +203,7 @@ export default function ConnectPage() {
                         onChange={handleChange}
                         required
                         placeholder="Jane Doe"
-                        className="text-sm py-2 px-3 bg-white"
+                        className="text-sm py-2 px-3 bg-white w-full border border-foreground/10 rounded"
                       />
                     </div>
 
@@ -204,8 +219,27 @@ export default function ConnectPage() {
                         onChange={handleChange}
                         required
                         placeholder="jane@example.com"
-                        className="text-sm py-2 px-3 bg-white"
+                        className="text-sm py-2 px-3 bg-white w-full border border-foreground/10 rounded"
                       />
+                    </div>
+
+                    <div>
+                      <label htmlFor="inquiryType" className="block text-3xs font-mono uppercase tracking-widest text-foreground-muted mb-2">
+                        Inquiry Type
+                      </label>
+                      <select
+                        id="inquiryType"
+                        name="inquiryType"
+                        value={formData.inquiryType}
+                        onChange={handleChange}
+                        required
+                        className="text-sm py-2 px-3 bg-white w-full border border-foreground/10 rounded"
+                      >
+                        <option value="Full-Time Engineering">Full-Time Engineering</option>
+                        <option value="MVP Development">MVP Development</option>
+                        <option value="Technical Consultation">Technical Consultation</option>
+                        <option value="Other Collaboration">Other Collaboration</option>
+                      </select>
                     </div>
 
                     <div>
@@ -220,16 +254,16 @@ export default function ConnectPage() {
                         required
                         placeholder="Detail your inquiry, requirements, or schedule preferences..."
                         rows={5}
-                        className="text-sm py-2 px-3 bg-white"
+                        className="text-sm py-2 px-3 bg-white w-full border border-foreground/10 rounded"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="btn-primary w-full py-2.5 text-xs tracking-widest"
+                      className="btn-primary w-full py-2.5 text-xs tracking-widest cursor-pointer"
                     >
-                      {isSubmitting ? "Sending..." : "Submit Inquiry"}
+                      {isSubmitting ? "Opening Mail client..." : "Send Inquiry (Opens Mail App)"}
                     </button>
                   </form>
                 </div>

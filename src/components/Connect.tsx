@@ -181,7 +181,7 @@ export default function Connect() {
 
         {/* CTA */}
         <RevealOnScroll delay={0.6}>
-          <MagneticButton href="/contact">
+          <MagneticButton href="/connect">
             Send a Message
             <svg
               width="14"
