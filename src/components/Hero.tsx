@@ -232,29 +232,12 @@ function TechBackground() {
 }
 
 function WorksPreviewStack() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isStackHovered, setIsStackHovered] = useState(false);
+  const [isOverlayHovered, setIsOverlayHovered] = useState(false);
+  
+  // Connect Card is initially at index 1 (second from bottom).
+  // UdyamEdge is at index 3 (top of the stack).
   const [projects, setProjects] = useState([
-    {
-      title: "UdyamEdge",
-      category: "B2B & Startup Dev",
-      image: "/projects/udyamedge.png",
-      href: "/work/udyamedge",
-      rotation: -4,
-      xOffset: -12,
-      yOffset: 0,
-      isConnectCard: false,
-    },
-    {
-      title: "Grenomart",
-      category: "E-Commerce System",
-      image: "/projects/grenomart.png",
-      href: "/work/grenomart",
-      rotation: 2,
-      xOffset: 12,
-      yOffset: 16,
-      isConnectCard: false,
-    },
     {
       title: "Ankita's Studio",
       category: "Creative Portfolio",
@@ -275,46 +258,137 @@ function WorksPreviewStack() {
       yOffset: 24,
       isConnectCard: true,
     },
+    {
+      title: "Grenomart",
+      category: "E-Commerce System",
+      image: "/projects/grenomart.png",
+      href: "/work/grenomart",
+      rotation: 2,
+      xOffset: 12,
+      yOffset: 16,
+      isConnectCard: false,
+    },
+    {
+      title: "UdyamEdge",
+      category: "B2B & Startup Dev",
+      image: "/projects/udyamedge.png",
+      href: "/work/udyamedge",
+      rotation: -4,
+      xOffset: -12,
+      yOffset: 0,
+      isConnectCard: false,
+    },
   ]);
 
-  const handleShuffle = useCallback((e?: React.MouseEvent) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
+  const lastShuffleTime = useRef(0);
+  
+  // Rate-limiting helper to keep animations buttery smooth
+  const canShuffle = useCallback(() => {
+    const now = Date.now();
+    if (now - lastShuffleTime.current > 500) {
+      lastShuffleTime.current = now;
+      return true;
     }
+    return false;
+  }, []);
+
+  // Standard 3-cycle shuffle for resting stack to keep Connect Card at index 1
+  const handleShuffle = useCallback(() => {
     setProjects((prev) => {
       const next = [...prev];
-      const topCard = next.pop(); // Take the top card (last element)
-      if (topCard) {
-        next.unshift(topCard); // Put it at the bottom (first element)
-      }
+      const p0 = next[0];
+      const p2 = next[2];
+      const p3 = next[3];
+      next[0] = p3;
+      next[2] = p0;
+      next[3] = p2;
       return next;
     });
   }, []);
 
-  // Auto-shuffle stack every 4 seconds when stack is not hovered
+  const handleShuffleReverse = useCallback(() => {
+    setProjects((prev) => {
+      const next = [...prev];
+      const p0 = next[0];
+      const p2 = next[2];
+      const p3 = next[3];
+      next[0] = p2;
+      next[2] = p3;
+      next[3] = p0;
+      return next;
+    });
+  }, []);
+
+  // Full 4-card cycling for lightbox
+  const handleLightboxShuffle = useCallback(() => {
+    setProjects((prev) => {
+      const next = [...prev];
+      const topCard = next.pop();
+      if (topCard) next.unshift(topCard);
+      return next;
+    });
+  }, []);
+
+  const handleLightboxShuffleReverse = useCallback(() => {
+    setProjects((prev) => {
+      const next = [...prev];
+      const bottomCard = next.shift();
+      if (bottomCard) next.push(bottomCard);
+      return next;
+    });
+  }, []);
+
+  // Restore resting layout order on exit: Connect Card at index 1, active card at index 3
+  const restoreStackOrder = useCallback((currentProjects: typeof projects) => {
+    const active = currentProjects[3];
+    const connectCard = currentProjects.find((p) => p.isConnectCard)!;
+    const otherProjects = currentProjects.filter(
+      (p) => !p.isConnectCard && p.title !== active.title
+    );
+
+    if (!active.isConnectCard) {
+      return [
+        otherProjects[0],
+        connectCard,
+        otherProjects[1],
+        active,
+      ];
+    } else {
+      const udyamEdge = currentProjects.find((p) => p.title === "UdyamEdge")!;
+      const remaining = currentProjects.filter(
+        (p) => p.title !== "UdyamEdge" && !p.isConnectCard
+      );
+      return [
+        remaining[0],
+        connectCard,
+        remaining[1],
+        udyamEdge,
+      ];
+    }
+  }, []);
+
+  // Auto-shuffle the resting deck every 4.5 seconds when not hovered
   useEffect(() => {
-    if (isStackHovered) return;
+    if (isStackHovered || isOverlayHovered) return;
     const interval = setInterval(() => {
       handleShuffle();
-    }, 4000);
+    }, 4500);
     return () => clearInterval(interval);
-  }, [isStackHovered, handleShuffle]);
+  }, [isStackHovered, isOverlayHovered, handleShuffle]);
 
-  const handleCardClick = (idx: number, e: React.MouseEvent) => {
-    const isTop = idx === projects.length - 1;
-    if (!isTop) {
-      e.preventDefault();
-      e.stopPropagation();
-      setProjects((prev) => {
-        const next = [...prev];
-        // Move the clicked card to the bottom to bring the next cards to front, or cycle
-        const topCard = next.pop();
-        if (topCard) next.unshift(topCard);
-        return next;
-      });
+  const showLightbox = (isStackHovered || isOverlayHovered) && projects.length > 0;
+
+  // Lock body scroll when lightbox is active to prevent page scrolling
+  useEffect(() => {
+    if (showLightbox) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
     }
-  };
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showLightbox]);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -323,11 +397,12 @@ function WorksPreviewStack() {
         onMouseEnter={() => setIsStackHovered(true)}
         onMouseLeave={() => {
           setIsStackHovered(false);
-          setHoveredIndex(null);
+          if (!isOverlayHovered) {
+            setProjects((prev) => restoreStackOrder(prev));
+          }
         }}
       >
         {projects.map((project, idx) => {
-          const isHovered = hoveredIndex === idx;
           const total = projects.length;
           
           let rot = project.rotation;
@@ -336,26 +411,10 @@ function WorksPreviewStack() {
           let scale = 1 - (total - 1 - idx) * 0.04;
           let zIndex = idx + 10;
 
-          if (isStackHovered) {
-            const factor = idx - (total - 1) / 2;
-            rot = factor * 7;
-            x = factor * 40;
-            y = -10;
-          }
-
-          if (isHovered) {
-            rot = 0;
-            x = (idx - (total - 1) / 2) * 12;
-            y = -30;
-            scale = 1.05;
-            zIndex = 50;
-          }
-
           return (
             <motion.div
               key={project.title}
-              onClick={(e) => handleCardClick(idx, e)}
-              className="absolute w-[88%] aspect-[1.5] bg-white rounded-lg border border-foreground/10 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.12)] transition-shadow duration-500 group"
+              className="absolute w-[88%] aspect-[1.5] bg-white rounded-lg border border-foreground/10 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
               style={{ originX: 0.5, originY: 0.5 }}
               animate={{
                 rotate: rot,
@@ -369,220 +428,246 @@ function WorksPreviewStack() {
                 stiffness: 240,
                 damping: 20,
               }}
-              onMouseEnter={() => setHoveredIndex(idx)}
-              onMouseLeave={() => setHoveredIndex(null)}
             >
-              <Link href={project.href} className="block w-full h-full relative">
-                {/* Browser Frame Header */}
-                <div className="h-6 bg-neutral-100/90 border-b border-foreground/5 flex items-center px-3 gap-1.5 justify-between">
-                  <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
-                  </div>
-                  <div className="text-[9px] font-mono text-neutral-400 tracking-wider truncate max-w-[170px]">
-                    {project.isConnectCard ? "sarthakdevstudio.com/connect" : `${project.title.toLowerCase().replace("'", "").replace(" ", "")}.com`}
-                  </div>
-                  <div className="w-4" />
+              {/* Browser Mock Header */}
+              <div className="h-3.5 bg-neutral-100/90 border-b border-foreground/5 flex items-center px-2.5 gap-1 justify-between select-none">
+                <div className="flex gap-0.5">
+                  <div className="w-[3px] h-[3px] rounded-full bg-neutral-300" />
+                  <div className="w-[3px] h-[3px] rounded-full bg-neutral-300" />
+                  <div className="w-[3px] h-[3px] rounded-full bg-neutral-300" />
                 </div>
+                <div className="text-[6px] font-mono text-neutral-400 tracking-wider truncate max-w-[95px]">
+                  {project.isConnectCard ? "sarthakdevstudio.com" : `${project.title.toLowerCase().replace("'", "").replace(" ", "")}.com`}
+                </div>
+                <div className="w-2" />
+              </div>
 
-                {/* Card Body */}
-                <div className="relative w-full h-[calc(100%-24px)] bg-neutral-50 overflow-hidden">
-                  {project.isConnectCard ? (
-                    <div className="w-full h-full bg-black text-white flex flex-col justify-between p-5 font-mono relative overflow-hidden select-none">
-                      {/* Blueprint background grid */}
-                      <div className="absolute inset-0 opacity-15 bg-[linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:20px_20px]" />
-                      
-                      {/* Card Header */}
-                      <div className="flex justify-between items-center z-10 border-b border-white/10 pb-2">
-                        <span className="text-[8px] uppercase tracking-widest text-white/50">Collab — Request</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                      </div>
-
-                      {/* Card Center */}
-                      <div className="my-auto z-10 flex flex-col gap-1.5">
-                        <h4 className="font-serif text-2xl text-white tracking-tight leading-none">
-                          Your Project Next?
-                        </h4>
-                        <p className="text-[9px] text-neutral-400 font-mono leading-relaxed max-w-[220px]">
-                          Let's collaborate to build high-performance products.
-                        </p>
-                      </div>
-
-                      {/* Card Footer */}
-                      <div className="z-10 flex justify-between items-center border-t border-white/10 pt-2">
-                        <span className="text-[8px] uppercase tracking-widest text-white/50">Click to connect</span>
-                        <div className="px-2 py-0.5 border border-white/20 rounded text-[8px] bg-white/5 text-white">
-                          INQUIRY.EXE
-                        </div>
-                      </div>
+              {/* Card Thumbnail Body */}
+              <div className="relative w-full h-[calc(100%-14px)] bg-neutral-50 overflow-hidden">
+                {project.isConnectCard ? (
+                  <div className="w-full h-full bg-black text-white flex flex-col justify-between p-4 font-mono relative overflow-hidden select-none">
+                    <div className="absolute inset-0 opacity-10 bg-[linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
+                    <div className="flex justify-between items-center z-10 border-b border-white/10 pb-1.5">
+                      <span className="text-[6px] uppercase tracking-widest text-white/50">Collab</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                     </div>
-                  ) : (
-                    <>
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-full object-cover grayscale-[35%] group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-[1.03]"
-                      />
-                      
-                      {/* Information Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
-                        <span className="text-[10px] font-mono text-white/70 uppercase tracking-widest mb-0.5">
-                          {project.category}
-                        </span>
-                        <h4 className="font-serif text-lg leading-tight flex items-center gap-1.5">
-                          <span>{project.title}</span>
-                          <svg
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="translate-y-0.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200"
-                          >
-                            <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
-                          </svg>
-                        </h4>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </Link>
+                    <div className="my-auto z-10 flex flex-col gap-0.5">
+                      <h4 className="font-serif text-[11px] sm:text-xs text-white tracking-tight leading-none">
+                        Your Project Next?
+                      </h4>
+                    </div>
+                    <div className="z-10 flex justify-between items-center text-[5px] text-white/40 border-t border-white/10 pt-1.5">
+                      <span>Click to connect</span>
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
             </motion.div>
           );
         })}
-
-        {/* Shuffle Floating Action Button */}
-        <motion.button
-          onClick={(e) => handleShuffle(e)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="absolute bottom-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[9px] font-mono rounded-full border border-white/20 shadow-lg cursor-pointer hover:bg-neutral-900 transition-colors uppercase tracking-wider"
-          title="Shuffle Stack"
-        >
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
-          </svg>
-          <span>Shuffle</span>
-        </motion.button>
-      </div>
-
-      {/* Explore All CTA Button under images */}
-      <div className="flex flex-col items-center gap-2 mt-8 w-full z-20">
-        <Link
-          href="/work"
-          className="btn-secondary text-[10px] uppercase tracking-widest px-7 py-3 flex items-center gap-2 cursor-pointer bg-white border border-foreground/10 hover:border-foreground/30 hover:bg-neutral-50 rounded transition-all duration-300 shadow-[0_2px_8px_rgba(0,0,0,0.02)]"
-        >
-          <span>Explore All Projects</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </Link>
-        <span className="text-[9px] font-mono text-foreground-muted uppercase tracking-widest opacity-60">
-          Click stack or button to shuffle
+        <span className="absolute text-[10px] uppercase tracking-widest font-mono opacity-40">
+          Interaction Active
         </span>
       </div>
 
       {/* Enlarged Focus Lightbox on Hover */}
       <AnimatePresence>
-        {hoveredIndex !== null && (
+        {showLightbox && (
           <>
             {/* Blurry Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/[0.15] backdrop-blur-[7px] z-40 pointer-events-none"
+              className="fixed inset-0 bg-black/[0.12] backdrop-blur-[6px] z-40 pointer-events-none"
               transition={{ duration: 0.25 }}
             />
             
-            {/* Centered Enlarged Image Card (pointer-events-none allows clicks to pass through to stack card link!) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, x: "-50%", y: "-45%" }}
-              animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
-              exit={{ opacity: 0, scale: 0.9, x: "-50%", y: "-45%" }}
-              transition={{ type: "spring", stiffness: 320, damping: 24 }}
-              className="fixed top-1/2 left-1/2 w-[90vw] max-w-[760px] aspect-[1.5] bg-white rounded-xl border border-foreground/10 overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.18)] z-50 pointer-events-none select-none"
+            {/* Carousel Interactive Viewport */}
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+              onWheel={(e) => {
+                e.preventDefault();
+                if (canShuffle()) {
+                  if (e.deltaY > 0) {
+                    handleLightboxShuffle();
+                  } else {
+                    handleLightboxShuffleReverse();
+                  }
+                }
+              }}
             >
-              {projects[hoveredIndex].isConnectCard ? (
-                <div className="w-full h-full bg-black text-white flex flex-col justify-between p-8 sm:p-12 font-mono relative overflow-hidden">
-                  {/* Blueprint background grid */}
-                  <div className="absolute inset-0 opacity-15 bg-[linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:30px_30px]" />
-                  
-                  {/* Card Header */}
-                  <div className="flex justify-between items-center z-10 border-b border-white/10 pb-4">
-                    <span className="text-2xs uppercase tracking-widest text-white/50">Collab — Request</span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-                  </div>
+              <div 
+                className="relative w-full max-w-[760px] aspect-[1.5] flex items-center justify-center pointer-events-auto"
+                onMouseEnter={() => setIsOverlayHovered(true)}
+                onMouseLeave={() => {
+                  setIsOverlayHovered(false);
+                  if (!isStackHovered) {
+                    setProjects((prev) => restoreStackOrder(prev));
+                  }
+                }}
+              >
+                {/* Render the 3 visible carousel cards using mapped offset indices */}
+                {[-1, 0, 1].map((offset) => {
+                  // Mapped Indices: Left (index 0), Center (index 3), Right (index 2)
+                  // This places the Connect Card (index 1) in the hidden/last position initially
+                  let projectIdx = 3;
+                  if (offset === -1) projectIdx = 0;
+                  if (offset === 1) projectIdx = 2;
 
-                  {/* Card Center */}
-                  <div className="my-auto z-10 flex flex-col gap-3">
-                    <h4 className="font-serif text-4xl sm:text-5xl text-white tracking-tight leading-none">
-                      Your Project Next?
-                    </h4>
-                    <p className="text-xs sm:text-sm text-neutral-400 font-mono leading-relaxed max-w-sm">
-                      Let's collaborate to build high-performance products. Open to contract roles & product advisory.
-                    </p>
-                  </div>
+                  const project = projects[projectIdx];
+                  const isCenter = offset === 0;
 
-                  {/* Card Footer */}
-                  <div className="z-10 flex justify-between items-center border-t border-white/10 pt-4">
-                    <span className="text-xs uppercase tracking-widest text-white/50">Click to connect</span>
-                    <div className="px-3 py-1 border border-white/20 rounded text-xs bg-white/5 text-white">
-                      INQUIRY.EXE
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="w-full h-full relative">
-                  {/* Browser Header Bar */}
-                  <div className="absolute top-0 left-0 right-0 h-8 bg-neutral-100 border-b border-foreground/5 flex items-center px-4 gap-2 justify-between">
-                    <div className="flex gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-neutral-300" />
-                      <div className="w-2 h-2 rounded-full bg-neutral-300" />
-                      <div className="w-2 h-2 rounded-full bg-neutral-300" />
-                    </div>
-                    <div className="text-[10px] font-mono text-neutral-400 tracking-wider">
-                      {projects[hoveredIndex].title.toLowerCase().replace("'", "").replace(" ", "")}.com
-                    </div>
-                    <div className="w-4" />
-                  </div>
-                  {/* Screenshot Container */}
-                  <div className="absolute inset-0 mt-8 w-full h-[calc(100%-32px)] bg-neutral-50">
-                    <img
-                      src={projects[hoveredIndex].image}
-                      alt={projects[hoveredIndex].title}
-                      className="w-full h-full object-cover"
-                    />
-                    
-                    {/* Information Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-6 sm:p-8 text-white">
-                      <span className="text-xs font-mono text-white/70 uppercase tracking-widest mb-1">
-                        {projects[hoveredIndex].category}
-                      </span>
-                      <h4 className="font-serif text-2xl sm:text-3xl leading-tight flex items-center gap-2">
-                        <span>{projects[hoveredIndex].title}</span>
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
-                        </svg>
-                      </h4>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </motion.div>
+                  // Define dynamic styles based on position
+                  let x = "0%";
+                  let scale = 1;
+                  let rot = 0;
+                  let opacity = 1;
+                  let cursor = isCenter ? "pointer" : "pointer";
+
+                  if (offset === -1) {
+                    x = "-106%";
+                    scale = 0.8;
+                    rot = -5;
+                    opacity = 0.45;
+                  } else if (offset === 1) {
+                    x = "106%";
+                    scale = 0.8;
+                    rot = 5;
+                    opacity = 0.45;
+                  }
+
+                  return (
+                    <motion.div
+                      key={project.title + offset}
+                      onMouseEnter={() => {
+                        if (offset === -1 && canShuffle()) {
+                          handleLightboxShuffleReverse();
+                        } else if (offset === 1 && canShuffle()) {
+                          handleLightboxShuffle();
+                        }
+                      }}
+                      onClick={(e) => {
+                        if (offset === -1) {
+                          e.preventDefault();
+                          if (canShuffle()) handleLightboxShuffleReverse();
+                        } else if (offset === 1) {
+                          e.preventDefault();
+                          if (canShuffle()) handleLightboxShuffle();
+                        }
+                      }}
+                      whileHover={!isCenter ? { scale: 0.85, opacity: 0.75, x: offset === -1 ? "-102%" : "102%" } : { scale: 1.02 }}
+                      initial={{ opacity: 0, scale: 0.7, x: offset === -1 ? "-150%" : offset === 1 ? "150%" : "0%", y: "-50%" }}
+                      animate={{ opacity, scale, x, y: "-50%", rotate: rot }}
+                      exit={{ opacity: 0, scale: 0.7, x: offset === -1 ? "-150%" : offset === 1 ? "150%" : "0%" }}
+                      transition={{ type: "spring", stiffness: 280, damping: 24 }}
+                      className="absolute top-1/2 left-1/2 w-full h-full bg-white rounded-xl border border-foreground/10 overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.12)] group"
+                      style={{ originX: 0.5, originY: 0.5, cursor, zIndex: isCenter ? 50 : 30 }}
+                    >
+                      <Link href={project.href} className="block w-full h-full relative" onClick={(e) => !isCenter && e.preventDefault()}>
+                        {/* Browser Header Bar */}
+                        <div className="h-6 bg-neutral-100/90 border-b border-foreground/5 flex items-center px-4 gap-2 justify-between">
+                          <div className="flex gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
+                          </div>
+                          <div className="text-[9px] font-mono text-neutral-400 tracking-wider truncate max-w-[170px]">
+                            {project.isConnectCard ? "sarthakdevstudio.com/connect" : `${project.title.toLowerCase().replace("'", "").replace(" ", "")}.com`}
+                          </div>
+                          <div className="w-4" />
+                        </div>
+
+                        {/* Card Body */}
+                        <div className="relative w-full h-[calc(100%-24px)] bg-neutral-50 overflow-hidden">
+                          {project.isConnectCard ? (
+                            <div className="w-full h-full bg-black text-white flex flex-col justify-between p-6 sm:p-10 font-mono relative overflow-hidden select-none">
+                              <div className="absolute inset-0 opacity-15 bg-[linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:24px_24px]" />
+                              
+                              <div className="flex justify-between items-center z-10 border-b border-white/10 pb-3">
+                                <span className="text-[9px] uppercase tracking-widest text-white/50">Collab — Request</span>
+                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                              </div>
+
+                              <div className="my-auto z-10 flex flex-col gap-2">
+                                <h4 className="font-serif text-3xl sm:text-4xl text-white tracking-tight leading-none">
+                                  Your Project Next?
+                                </h4>
+                                <p className="text-[10px] sm:text-xs text-neutral-400 font-mono leading-relaxed max-w-[260px]">
+                                  Let's collaborate to build high-performance products. Open to contract roles & product advisory.
+                                </p>
+                              </div>
+
+                              <div className="z-10 flex justify-between items-center border-t border-white/10 pt-3">
+                                <span className="text-[9px] uppercase tracking-widest text-white/50">Click to connect</span>
+                                <div className="px-2.5 py-0.5 border border-white/20 rounded text-[9px] bg-white/5 text-white">
+                                  INQUIRY.EXE
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="w-full h-full relative">
+                              <img
+                                src={project.image}
+                                alt={project.title}
+                                className="w-full h-full object-cover"
+                              />
+                              
+                              {/* Overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-transparent flex flex-col justify-end p-5 sm:p-6 text-white">
+                                <span className="text-[10px] font-mono text-white/60 uppercase tracking-widest mb-1">
+                                  {project.category}
+                                </span>
+                                <h4 className="font-serif text-xl sm:text-2xl leading-tight flex items-center gap-1.5">
+                                  <span>{project.title}</span>
+                                  <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
+                                  </svg>
+                                </h4>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+              
+              {/* Scroll or Hover to Change Indicator */}
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] font-mono text-white/60 tracking-widest uppercase pointer-events-none select-none z-50 bg-black/50 px-4 py-2 rounded-full backdrop-blur border border-white/10 flex items-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-white/70 animate-bounce"
+                >
+                  <path d="M12 5v14"/>
+                  <path d="m19 12-7 7-7-7"/>
+                </svg>
+                <span>Scroll or hover sides to change</span>
+              </div>
+            </div>
           </>
         )}
       </AnimatePresence>
