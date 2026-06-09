@@ -12,10 +12,10 @@ function getGreeting(): string {
 }
 
 const roles = [
-  "Full Stack Developer.",
-  "Product Builder.",
-  "Problem Solver.",
-  "Future Founder.",
+  "Digital Product Studio.",
+  "Engineering & Design.",
+  "Idea to Deployment.",
+  "Startup Growth Partners.",
 ];
 
 function TechBackground() {
@@ -676,12 +676,7 @@ function WorksPreviewStack() {
 }
 
 export default function Hero() {
-  const [greeting, setGreeting] = useState("Hello");
   const [roleIndex, setRoleIndex] = useState(0);
-
-  useEffect(() => {
-    setGreeting(getGreeting());
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -714,7 +709,7 @@ export default function Hero() {
   };
 
   // Letter-by-letter animation for the headline
-  const headlineText = "I\u2019m Sarthak.";
+  const headlineText = "Sarthak Dev Studio.";
   const letterVariants: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -756,15 +751,6 @@ export default function Hero() {
                 <div className="section-index !mb-0">01 — Introduction</div>
                 <span className="text-xs uppercase tracking-widest font-mono opacity-40">Sarthak Dev Studio</span>
               </motion.div>
-
-              {/* Greeting */}
-              <motion.p
-                className="text-base md:text-lg mb-6 font-mono opacity-80"
-                style={{ color: "var(--foreground-secondary)" }}
-                variants={itemVariants}
-              >
-                {greeting}
-              </motion.p>
 
               {/* Main Headline — letter-by-letter with depth */}
               <div className="max-w-6xl">
@@ -810,7 +796,7 @@ export default function Hero() {
                   style={{ color: "var(--foreground-muted)" }}
                   variants={itemVariants}
                 >
-                  Building digital products from idea to deployment — where engineering meets design meets business thinking.
+                  We build premium digital products from idea to deployment — where engineering meets design meets business thinking.
                 </motion.p>
               </div>
 
