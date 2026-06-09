@@ -260,6 +260,14 @@
   color: var(--foreground);
 }
 
+.text-depth {
+  text-shadow: 
+    0.5px 0.5px 0px rgba(0, 0, 0, 0.08),
+    1px 1px 0px rgba(0, 0, 0, 0.05),
+    1.5px 1.5px 0px rgba(0, 0, 0, 0.03),
+    2px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
 .text-editorial {
   font-family: var(--font-serif);
   font-style: italic;
