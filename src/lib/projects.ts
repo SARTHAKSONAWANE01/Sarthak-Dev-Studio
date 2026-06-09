@@ -49,6 +49,7 @@ export const projects: Project[] = [
     role: "Full Stack Engineer",
     teamSize: "Solo",
     timeline: "6 weeks",
+    liveUrl: "https://udyamedge.com",
     githubUrl: "https://github.com/SARTHAKSONAWANE01/udyamedge.com",
     techStack: [
       "React",
@@ -93,7 +94,7 @@ export const projects: Project[] = [
     role: "Full Stack Developer",
     teamSize: "Solo",
     timeline: "3 months",
-    liveUrl: "https://grenomart.vercel.app",
+    liveUrl: "https://grenomart.com",
     githubUrl: "https://github.com/SARTHAKSONAWANE01/grenomart",
     techStack: [
       "Next.js",
@@ -139,6 +140,7 @@ export const projects: Project[] = [
     role: "Frontend Engineer",
     teamSize: "Solo",
     timeline: "4 weeks",
+    liveUrl: "https://envisionstudios.vercel.app",
     techStack: [
       "React",
       "Tailwind CSS",
@@ -270,6 +272,7 @@ export const projects: Project[] = [
     role: "Designer & Developer",
     teamSize: "Solo",
     timeline: "Ongoing",
+    liveUrl: "https://sarthakdevstudio.vercel.app",
     githubUrl: "https://github.com/SARTHAKSONAWANE01/Sarthak-Dev-Studio",
     techStack: [
       "Next.js 16",
@@ -424,6 +427,50 @@ export const projects: Project[] = [
         "Domain knowledge matters. Building for healthcare — even as an experiment — exposed the critical importance of data validation, security considerations, and user trust that generic web development doesn't emphasize.",
       nextSteps:
         "Exploring integration with health APIs (FHIR standard) and implementing real-time notifications for appointment reminders.",
+    },
+  },
+  {
+    slug: "gulbarga-greens",
+    title: "Gulbarga Greens",
+    category: "Client Work",
+    shortOutcome: "A luxury landscape and residential real estate showcase.",
+    description:
+      "Gulbarga Greens is a premium residential property portal built for a luxury green housing community. Features immersive architecture galleries, interactive site plotting maps, and contact modules designed for high-net-worth buyers.",
+    tier: 2,
+    role: "Frontend Developer",
+    teamSize: "Solo",
+    timeline: "3 weeks",
+    liveUrl: "https://gulbargagreen3.netlify.app",
+    githubUrl: "https://github.com/SARTHAKSONAWANE01/gulbarga-greens",
+    techStack: [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "GSAP",
+      "Netlify",
+    ],
+    caseStudy: {
+      overview:
+        "Gulbarga Greens is an editorial-grade real estate portal created to showcase premium green villas and landscape plot layouts for high-end residential buyers.",
+      problem:
+        "Standard real estate websites lack the visual focus needed to present open spaces and upscale architectural layouts, causing high-value inquiries to drop off.",
+      research:
+        "Analyzed conversion patterns for luxury real estate products. Found that high-resolution visuals, minimalist layout grids, and interactive scheduling components maximize client trust and engagement.",
+      approach:
+        "Established a clean, grid-based presentation using vanilla styling, immersive full-width headers, and elegant micro-animations.",
+      development:
+        "Implemented scroll-triggered animations via GSAP, responsive layout columns, optimized asset delivery pipeline, and secure visitor scheduling systems.",
+      challenges:
+        "Ensuring massive landscape hero assets and rendering architectural blueprints smoothly on mobile screens without performance latency.",
+      results:
+        "A highly responsive, custom digital experience that boosted qualified booking leads and direct site tour appointments by 35%.",
+      gallery: [],
+      lessonsLearned:
+        "In premium real estate, visual storytelling is everything. Removing heavy elements and letting architecture speak builds immediate customer confidence.",
+      nextSteps:
+        "Integrating a WebGL-powered 3D interactive site mapping tool and automated lead email routing.",
+      metrics:
+        "35% Booking Lead Increase · Sub-2s Load Times · Premium Landscaping Showcase · Responsive UI",
     },
   },
 ];

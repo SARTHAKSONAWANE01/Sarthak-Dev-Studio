@@ -17,6 +17,7 @@ const projectGradients: Record<string, string> = {
   raibyrai: "linear-gradient(135deg, #222 0%, #444 50%, #111 100%)",
   udyamedge: "linear-gradient(135deg, #0d0d0d 0%, #292929 50%, #111 100%)",
   "ankitas-studio": "linear-gradient(135deg, #1f1a24 0%, #332a3d 50%, #17121c 100%)",
+  "gulbarga-greens": "linear-gradient(135deg, #13241d 0%, #1c3d2f 50%, #0d1a14 100%)",
 };
 
 const projectImages: Record<string, string> = {
@@ -27,6 +28,7 @@ const projectImages: Record<string, string> = {
   "ankitas-studio": "/projects/ankitas-studio.png",
   "gta6-landing-page": "/projects/gta6.png",
   "sarthak-dev-studio": "/projects/portfolio.png",
+  "gulbarga-greens": "/projects/gulbargagreens.png",
 };
 
 const filterTabs = [

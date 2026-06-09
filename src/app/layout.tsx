@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LenisProvider from "@/lib/lenis-provider";
+import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
 
 const inter = Inter({
@@ -64,7 +65,10 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col font-sans antialiased">
-        <LenisProvider>{children}</LenisProvider>
+        <LenisProvider>
+          {children}
+          <ScrollToTop />
+        </LenisProvider>
       </body>
     </html>
   );

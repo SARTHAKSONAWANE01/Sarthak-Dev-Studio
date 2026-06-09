@@ -105,17 +105,17 @@ export default function Footer() {
           
           <button
             onClick={scrollToTop}
-            className="group flex items-center gap-2 text-xs uppercase tracking-widest hover:text-foreground-secondary transition-colors"
+            className="group flex items-center justify-center w-8 h-8 rounded-full border border-foreground/10 hover:border-foreground/30 hover:text-foreground transition-all duration-300"
             style={{ color: "var(--foreground-muted)" }}
+            aria-label="Back to Top"
           >
-            <span>Back to Top</span>
             <svg
-              width="12"
-              height="12"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="group-hover:-translate-y-0.5 transition-transform duration-200"

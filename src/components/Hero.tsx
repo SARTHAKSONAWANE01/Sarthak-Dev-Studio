@@ -74,7 +74,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col justify-center section-spacing relative overflow-hidden"
+      className="min-h-screen flex flex-col justify-center pt-28 md:pt-36 pb-12 md:pb-16 relative overflow-hidden"
     >
       {/* Animated Grid Background */}
       <div className="hero-grid-bg" aria-hidden="true" />
@@ -87,11 +87,13 @@ export default function Hero() {
         >
           {/* Availability Badge + Section Index */}
           <motion.div
-            className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-8"
+            className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-8 justify-between border-b border-foreground/5 pb-6"
             variants={itemVariants}
           >
-            <div className="section-index !mb-0">01 — Introduction</div>
-            Sarthak Dev Studio
+            <div className="flex items-center gap-3 sm:gap-6">
+              <div className="section-index !mb-0">01 — Introduction</div>
+              <span className="text-xs uppercase tracking-widest font-mono opacity-40">Sarthak Dev Studio</span>
+            </div>
 
           </motion.div>
 
@@ -189,16 +191,40 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="scroll-indicator hidden md:flex"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
+      {/* Scroll Down Button */}
+      <motion.button
+        onClick={() => {
+          const target = document.getElementById("identity");
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth" });
+          }
+        }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer z-10 group bg-transparent border-none"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5, duration: 0.8 }}
       >
-        <span className="scroll-indicator-text">Scroll</span>
-        <span className="scroll-indicator-line" />
-      </motion.div>
+
+        <motion.div
+          className="w-8 h-8 rounded-full border border-foreground/10 flex items-center justify-center group-hover:border-foreground/30 transition-colors"
+          whileHover={{ y: 2 }}
+        >
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-foreground-secondary"
+          >
+            <path d="M12 5v14" />
+            <path d="m19 12-7 7-7-7" />
+          </svg>
+        </motion.div>
+      </motion.button>
     </section>
   );
 }

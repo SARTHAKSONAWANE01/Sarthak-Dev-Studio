@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
-  { title: "Work", path: "/#selected-work" },
-  { title: "Capabilities", path: "/#capabilities" },
-  { title: "Building Now", path: "/#building-now" },
-  { title: "Philosophy", path: "/#philosophy" },
-  { title: "Connect", path: "/#connect" },
+  { title: "Work", path: "/work" },
+  { title: "Capabilities", path: "/capabilities" },
+  { title: "Building Now", path: "/building-now" },
+  { title: "Philosophy", path: "/philosophy" },
+  { title: "Connect", path: "/connect" },
 ];
 
 export default function Navbar() {
@@ -56,7 +56,7 @@ export default function Navbar() {
         <div className="container-studio flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
           <Link
-            href="/"
+            href="/#hero"
             className="hover:opacity-60 transition-opacity flex items-center h-8 md:h-10"
           >
             <img
