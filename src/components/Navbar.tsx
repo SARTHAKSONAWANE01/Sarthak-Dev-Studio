@@ -47,8 +47,8 @@ export default function Navbar() {
         className={cn(
           "fixed w-full top-0 left-0 z-50 transition-all duration-500",
           scrolled
-            ? "bg-white/90 backdrop-blur-sm border-b border-black/5"
-            : "bg-transparent"
+            ? "bg-white/95 backdrop-blur-md border-b border-foreground/5 shadow-[0_2px_20px_-10px_rgba(0,0,0,0.05)]"
+            : "bg-transparent py-2"
         )}
       >
         <div className="container-studio flex justify-between items-center h-16 md:h-20">
