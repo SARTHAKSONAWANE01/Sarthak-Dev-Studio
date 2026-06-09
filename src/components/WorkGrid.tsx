@@ -13,6 +13,18 @@ const projectGradients: Record<string, string> = {
   "gta6-landing-page": "linear-gradient(135deg, #1a1a1a 0%, #080808 100%)",
   "client-project": "linear-gradient(135deg, #222222 0%, #0c0c0c 100%)",
   "stygo-web-health": "linear-gradient(135deg, #181818 0%, #050505 100%)",
+  bitdevxp: "linear-gradient(135deg, #121212 0%, #333 50%, #1a1a1a 100%)",
+  raibyrai: "linear-gradient(135deg, #222 0%, #444 50%, #111 100%)",
+  udyamedge: "linear-gradient(135deg, #0d0d0d 0%, #292929 50%, #111 100%)",
+};
+
+const projectImages: Record<string, string> = {
+  grenomart: "/projects/grenomart.png",
+  bitdevxp: "/projects/bitdevxp.png",
+  raibyrai: "/projects/raibyrai.png",
+  udyamedge: "/projects/udyamedge.png",
+  "gta6-landing-page": "/projects/gta6.png",
+  "sarthak-dev-studio": "/projects/portfolio.png",
 };
 
 const filterTabs = [
@@ -34,7 +46,9 @@ export default function WorkGrid({ initialProjects }: WorkGridProps) {
     if (activeTab === "full-stack") {
       return (
         project.category === "Full Stack Product" ||
-        project.slug === "stygo-web-health"
+        project.slug === "stygo-web-health" ||
+        project.slug === "udyamedge" ||
+        project.slug === "bitdevxp"
       );
     }
     if (activeTab === "frontend") {
@@ -44,7 +58,7 @@ export default function WorkGrid({ initialProjects }: WorkGridProps) {
       );
     }
     if (activeTab === "client-work") {
-      return project.category === "Client Work";
+      return project.category === "Client Work" || project.slug === "raibyrai";
     }
     return true;
   });
@@ -111,26 +125,38 @@ export default function WorkGrid({ initialProjects }: WorkGridProps) {
               className="group"
             >
               <Link href={`/work/${project.slug}`} className="block">
-                {/* Gradient Card Header */}
+                {/* Image Card Header */}
                 <div
                   className="aspect-video w-full mb-6 rounded-lg relative overflow-hidden border border-foreground/5 flex items-center justify-center p-8 transition-all duration-500 group-hover:scale-[1.01] group-hover:shadow-lg"
                   style={{
                     background: projectGradients[project.slug] || "var(--color-grey-900)",
                   }}
                 >
+                  {/* Real Image Background */}
+                  {projectImages[project.slug] && (
+                    <>
+                      <img
+                        src={projectImages[project.slug]}
+                        alt={project.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/60 group-hover:bg-black/50 transition-colors duration-300" />
+                    </>
+                  )}
+
                   {/* Grid Pattern inside Card */}
                   <div className="absolute inset-0 bg-grid-pattern opacity-10 mix-blend-overlay" />
                   
                   {/* Decorative elements */}
-                  <div className="absolute top-4 left-4 text-xs font-mono opacity-30 group-hover:opacity-60 transition-opacity">
+                  <div className="absolute top-4 left-4 text-xs font-mono text-white/55 group-hover:text-white/80 transition-colors">
                     {project.role}
                   </div>
-                  <div className="absolute top-4 right-4 text-xs font-mono opacity-30 group-hover:opacity-60 transition-opacity">
+                  <div className="absolute top-4 right-4 text-xs font-mono text-white/55 group-hover:text-white/80 transition-colors">
                     {project.timeline || "Active"}
                   </div>
                   
                   <div className="text-center z-10 transition-transform duration-500 group-hover:scale-105">
-                    <span className="text-2xs uppercase tracking-widest text-foreground-muted mb-2 block opacity-60">
+                    <span className="text-2xs uppercase tracking-widest text-white/60 mb-2 block font-sans">
                       {project.category}
                     </span>
                     <h3 className="text-2xl md:text-3xl font-serif text-white font-normal">

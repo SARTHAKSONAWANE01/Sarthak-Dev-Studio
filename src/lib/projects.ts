@@ -252,6 +252,139 @@ export const projects: Project[] = [
         "Exploring integration with health APIs (FHIR standard) and implementing real-time notifications for appointment reminders.",
     },
   },
+  {
+    slug: "bitdevxp",
+    title: "BitDevXp",
+    category: "Full Stack Product",
+    shortOutcome: "A production-grade startup MVP and consulting landing platform.",
+    description:
+      "A marketing and lead generation platform for BitDevXp, a software development and technology consulting firm. Features high-performance static rendering, interactive contact forms, and custom sanitization filters.",
+    tier: 1,
+    role: "Lead Architect & Developer",
+    teamSize: "Solo",
+    timeline: "4 weeks",
+    liveUrl: "https://bitdevxp.vercel.app",
+    githubUrl: "https://github.com/SARTHAKSONAWANE01/BitDevXp",
+    techStack: [
+      "React 19",
+      "TanStack Start",
+      "Vite",
+      "Tailwind CSS v4",
+      "Framer Motion",
+      "Zod",
+    ],
+    caseStudy: {
+      overview:
+        "BitDevXp was built as a modern, high-conversion landing page for software development and MVP consulting. The objective was to combine high-performance page loads with a strict monochrome design paradigm.",
+      problem:
+        "Startup founders need high-speed, direct paths to schedule consultation sessions. Existing solutions rely on heavy frameworks or external dependencies that load slowly, causing potential clients to drop off.",
+      research:
+        "Researched conversion optimization patterns, minimalist Swiss design rules, and lightweight security frameworks. Analyzed form spam patterns to design honeypots and rate limiting.",
+      approach:
+        "Used React 19 and TanStack Start for server rendering and type-safe routing. Configured Tailwind CSS v4 to establish a consistent, low-latency design token configuration.",
+      development:
+        "Implemented custom sanitization logic, built a rate limiter, added security headers, and structured form validation using Zod and React Hook Form.",
+      challenges:
+        "Achieving strict monochrome typography layout without visual boredom required meticulous typography sizing, spacing, and micro-interactions.",
+      results:
+        "An optimized lead-generation portal with perfect Lighthouse scores, integrated secure contacts, and zero spam entries.",
+      gallery: [],
+      lessonsLearned:
+        "A strict monochrome design system makes visual hierarchy crucial. Good typography, fluid layout spacing, and well-designed details hold the site together.",
+      nextSteps:
+        "Integrating dynamic analytics and automated customer onboarding workflow pipelines.",
+      metrics:
+        "100% Lighthouse Performance · Zero Spam Forms · Type-safe routing · Production-ready",
+    },
+  },
+  {
+    slug: "raibyrai",
+    title: "Rai by Rai Advisory",
+    category: "Client Work",
+    shortOutcome: "A premium, fiduciary-grade real estate portfolio management experience.",
+    description:
+      "A luxury web experience for a conflict-free real estate advisory firm. Tailored for HNIs, NRIs, and Family Offices, presenting real estate portfolio metrics, strategic services, and investment pipelines.",
+    tier: 1,
+    role: "Designer & Developer",
+    teamSize: "Solo",
+    timeline: "4 weeks",
+    liveUrl: "https://thegyost.netlify.app",
+    githubUrl: "https://github.com/SARTHAKSONAWANE01/RaibyRai-Real-Estate-Advisory",
+    techStack: [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "IntersectionObserver",
+      "Framer Motion",
+    ],
+    caseStudy: {
+      overview:
+        "A premium single-page digital experience built for a real estate advisory firm. Communicates trust, exclusive fiduciary principles, and multigenerational wealth strategies.",
+      problem:
+        "The traditional broker network relies on hidden kickbacks and biased deals. The advisory firm required a digital presence to emphasize their fee-only model and institutional due diligence.",
+      research:
+        "Analyzed luxury branding, user journeys of HNIs and NRIs, and regulatory frameworks of property transitions in India.",
+      approach:
+        "Crafted a customized color system based on cream and gold details, leveraging Cormorant Garamond serif fonts for high-end editorial storytelling.",
+      development:
+        "Constructed custom JavaScript scroll observers, infinite orbital graphics, and structured forms for scheduling direct sessions.",
+      challenges:
+        "Balancing visual luxury features (like Orbit animations and gold accents) with fast page load requirements and complete responsiveness.",
+      results:
+        "A performant, highly tailored single-page website that effectively qualifies high-net-worth inquiries.",
+      gallery: [],
+      lessonsLearned:
+        "Luxury branding requires pixel-perfect attention to typography details, spacing, and restraint in animation timing.",
+      nextSteps:
+        "Adding an interactive client portfolio calculator and a digital investor portal.",
+      metrics:
+        "₹50Cr+ AUM Showcase · 2s Page Load Speed · Fiduciary Branding · Responsive UI",
+    },
+  },
+  {
+    slug: "udyamedge",
+    title: "UdyamEdge",
+    category: "Full Stack Product",
+    shortOutcome: "An enterprise incubation and program management platform.",
+    description:
+      "A complete program management workflow platform for startup accelerators. Features settings control panel, multi-stage timeline, evaluations, shortlisting pipelines, and funding updates.",
+    tier: 1,
+    role: "Full Stack Engineer",
+    teamSize: "Solo",
+    timeline: "6 weeks",
+    githubUrl: "https://github.com/SARTHAKSONAWANE01/udyamedge.com",
+    techStack: [
+      "React",
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "Tailwind CSS",
+      "TypeScript",
+    ],
+    caseStudy: {
+      overview:
+        "UdyamEdge is an enterprise platform developed to manage large-scale startup incubator programs and ideathons, mapping the entire startup journey from registration to pitching and funding.",
+      problem:
+        "Incubators struggle to coordinate settings, track startup progress, organize evaluations among dozens of judges, and distribute scores without high admin friction.",
+      research:
+        "Analyzed standard startup accelerator workflows (Y Combinator, Techstars) and designed database schemas for multi-phase milestones.",
+      approach:
+        "Created an interactive timeline on the frontend connected to a robust settings system on the backend, allowing instant global state management.",
+      development:
+        "Designed evaluation pipelines for judges, scheduling slots for workshops/pitches, and email dispatchers.",
+      challenges:
+        "Structuring database schemas and state sync logic so changing the global phase dynamically adapts dashboard panels.",
+      results:
+        "A production-ready incubator application successfully simplifying scoring, pipeline status, and startup evaluations.",
+      gallery: [],
+      lessonsLearned:
+        "Enterprise dashboard design demands robust state management, clear timelines, and foolproof access controls.",
+      nextSteps:
+        "Integrating real-time messaging, calendar systems, and video conference slots.",
+      metrics:
+        "₹25K Funding Workflows · 6-Stage Timeline · Judge Scoring Modules · Secure Auth",
+    },
+  },
 ];
 
 /* ============================================================

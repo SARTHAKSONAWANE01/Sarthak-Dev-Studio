@@ -91,10 +91,8 @@ export default function Hero() {
             variants={itemVariants}
           >
             <div className="section-index !mb-0">01 — Introduction</div>
-            <div className="availability-badge">
-              <span className="availability-dot" />
-              Available for work
-            </div>
+            Sarthak Dev Studio
+
           </motion.div>
 
           {/* Greeting */}

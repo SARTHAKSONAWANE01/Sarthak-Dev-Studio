@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
-  { title: "Work", path: "/work" },
-  { title: "About", path: "/about" },
-  { title: "Contact", path: "/contact" },
+  { title: "Work", path: "/#selected-work" },
+  { title: "Capabilities", path: "/#capabilities" },
+  { title: "Building Now", path: "/#building-now" },
+  { title: "Philosophy", path: "/#philosophy" },
+  { title: "Connect", path: "/#connect" },
 ];
 
 export default function Navbar() {
@@ -71,17 +73,11 @@ export default function Navbar() {
               <Link
                 key={item.title}
                 href={item.path}
-                className={cn(
-                  "nav-link",
-                  pathname === item.path && "nav-link-active"
-                )}
+                className="nav-link"
               >
                 {item.title}
               </Link>
             ))}
-            <Link href="/resume" className="btn-secondary !py-2 !px-5 text-xs">
-              Resume
-            </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -156,24 +152,7 @@ export default function Navbar() {
                   </Link>
                 </motion.div>
               ))}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{
-                  duration: 0.4,
-                  delay: navItems.length * 0.1,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                <Link
-                  href="/resume"
-                  className="inline-flex items-center gap-2 mt-4 px-8 py-3 text-xs font-sans font-medium uppercase tracking-widest text-white border border-white/30 hover:border-white transition-all"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Resume
-                </Link>
-              </motion.div>
+
             </nav>
           </motion.div>
         )}

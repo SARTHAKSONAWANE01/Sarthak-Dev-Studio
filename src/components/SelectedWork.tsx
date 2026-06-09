@@ -11,6 +11,18 @@ const projectGradients: Record<string, string> = {
   "sarthak-dev-studio": "linear-gradient(135deg, #222 0%, #555 50%, #111 100%)",
   "gta6-landing-page": "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
   "client-project": "linear-gradient(135deg, #2d2d2d 0%, #4a4a4a 50%, #1a1a1a 100%)",
+  bitdevxp: "linear-gradient(135deg, #121212 0%, #333 50%, #1a1a1a 100%)",
+  raibyrai: "linear-gradient(135deg, #222 0%, #444 50%, #111 100%)",
+  udyamedge: "linear-gradient(135deg, #0d0d0d 0%, #292929 50%, #111 100%)",
+};
+
+const projectImages: Record<string, string> = {
+  grenomart: "/projects/grenomart.png",
+  bitdevxp: "/projects/bitdevxp.png",
+  raibyrai: "/projects/raibyrai.png",
+  udyamedge: "/projects/udyamedge.png",
+  "gta6-landing-page": "/projects/gta6.png",
+  "sarthak-dev-studio": "/projects/portfolio.png",
 };
 
 export default function SelectedWork() {
@@ -125,21 +137,31 @@ export default function SelectedWork() {
                     <div className="flex items-center gap-4">
                       {/* Hover Thumbnail Preview */}
                       <motion.div
-                        className="hidden lg:block w-24 h-16 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{
-                          background: projectGradients[project.slug] || "var(--color-grey-100)",
-                        }}
+                        className="hidden lg:block w-32 h-20 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300 relative rounded border border-foreground/10"
                         variants={{
                           initial: { scale: 0.9, opacity: 0 },
                           hover: { scale: 1, opacity: 1 },
                         }}
                         transition={{ duration: 0.3 }}
                       >
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span className="text-white/30 text-xs font-sans uppercase tracking-widest">
-                            Preview
-                          </span>
-                        </div>
+                        {projectImages[project.slug] ? (
+                          <img
+                            src={projectImages[project.slug]}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div
+                            className="w-full h-full flex items-center justify-center"
+                            style={{
+                              background: projectGradients[project.slug] || "var(--color-grey-100)",
+                            }}
+                          >
+                            <span className="text-white/30 text-xs font-sans uppercase tracking-widest">
+                              Preview
+                            </span>
+                          </div>
+                        )}
                       </motion.div>
 
                       <motion.svg

@@ -57,10 +57,10 @@
   --radius: 0.5rem;
 
   /* --- Spacing System --- */
-  --section-gap: clamp(80px, 12vw, 160px);
+  --section-gap: clamp(40px, 6vw, 80px);
   --container-max: 1200px;
   --container-wide: 1440px;
-  --container-padding: clamp(20px, 5vw, 80px);
+  --container-padding: clamp(20px, 5vw, 60px);
 
   /* --- Typography Scale (Fluid) --- */
   --text-display: clamp(3rem, 8vw, 7rem);
