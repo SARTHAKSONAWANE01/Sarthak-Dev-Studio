@@ -32,14 +32,24 @@ function TechBackground() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
+    let lastWidth = window.innerWidth;
+    let lastHeight = window.innerHeight;
+
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+      // Only resize if width changes or height changes significantly (e.g. keyb/url bar toggle on mobile)
+      if (newWidth !== lastWidth || Math.abs(newHeight - lastHeight) > 100) {
+        width = canvas.width = newWidth;
+        height = canvas.height = newHeight;
+        lastWidth = newWidth;
+        lastHeight = newHeight;
+      }
     };
     window.addEventListener("resize", handleResize);
 
-    // Assembly instructions, binary, and server commands
+    // Assembly instructions, binary, server commands, and modern code elements
     const techSnippets = [
       "MOV EAX, 0x10",
       "ADD ESP, 8",
@@ -66,11 +76,44 @@ function TechBackground() {
       "01000001",
       "01010100",
       "git commit -m 'feat'",
+      "npm run dev",
       "npm run build",
       "HTTP/1.1 200 OK",
       "GET /api/contact",
       "ssh main@server",
+      "const app = next()",
+      "docker run -d",
+      "kubectl get pods",
+      "CREATE TABLE users",
+      "SELECT * FROM",
+      "await prisma.message",
+      "git push origin main",
+      "const [state, setState] = useState",
+      "useEffect(() => {",
+      "export default function",
+      "chmod +x deploy.sh",
+      "curl -X POST",
     ];
+
+    // Resolve current theme text color to adapt dynamically
+    const getThemeColor = () => {
+      if (typeof window === "undefined" || !canvas) return { r: 0, g: 0, b: 0 };
+      try {
+        const style = window.getComputedStyle(canvas);
+        const colorStr = style.color || "rgb(0, 0, 0)";
+        const match = colorStr.match(/\d+/g);
+        if (match && match.length >= 3) {
+          return {
+            r: parseInt(match[0], 10),
+            g: parseInt(match[1], 10),
+            b: parseInt(match[2], 10)
+          };
+        }
+      } catch (e) {
+        // silent fallback
+      }
+      return { r: 0, g: 0, b: 0 };
+    };
 
     // Initialize particles
     const particles: Array<{
@@ -82,15 +125,15 @@ function TechBackground() {
       opacity: number;
     }> = [];
 
-    const numParticles = 75;
+    const numParticles = 90; // Increased particle density
     for (let i = 0; i < numParticles; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
         text: techSnippets[Math.floor(Math.random() * techSnippets.length)],
-        speed: 0.15 + Math.random() * 0.4,
-        fontSize: 10 + Math.floor(Math.random() * 5),
-        opacity: 0.04 + Math.random() * 0.08,
+        speed: 0.12 + Math.random() * 0.35, // Slightly slower, smoother drift
+        fontSize: 11 + Math.floor(Math.random() * 6), // Slightly larger font size
+        opacity: 0.08 + Math.random() * 0.16, // Significantly increased opacity range
       });
     }
 
@@ -100,8 +143,12 @@ function TechBackground() {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
+      // Adapt colors dynamically to page foreground/theme
+      const themeColor = getThemeColor();
+      const rgbStr = `${themeColor.r}, ${themeColor.g}, ${themeColor.b}`;
+
       // 1. Draw very faint background grid
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.035)";
+      ctx.strokeStyle = `rgba(${rgbStr}, 0.05)`; // Faint grid lines
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += gridSpacing) {
         ctx.beginPath();
@@ -118,7 +165,7 @@ function TechBackground() {
 
       // 2. Draw drifting tech snippets
       particles.forEach((p) => {
-        ctx.fillStyle = `rgba(0, 0, 0, ${p.opacity})`;
+        ctx.fillStyle = `rgba(${rgbStr}, ${p.opacity})`;
         ctx.font = `${p.fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
         ctx.fillText(p.text, p.x, p.y);
 
@@ -130,12 +177,12 @@ function TechBackground() {
           p.y = height + 30;
           p.x = Math.random() * width;
           p.text = techSnippets[Math.floor(Math.random() * techSnippets.length)];
-          p.opacity = 0.04 + Math.random() * 0.08;
+          p.opacity = 0.08 + Math.random() * 0.16;
         }
       });
 
       // 3. Draw subtle glowing circuit path lines
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.strokeStyle = `rgba(${rgbStr}, 0.15)`; // Increased visibility for circuit lines
       ctx.lineWidth = 1.5;
       
       // Left side circuit
@@ -147,7 +194,7 @@ function TechBackground() {
       ctx.stroke();
 
       // Node dot
-      ctx.fillStyle = "rgba(0, 0, 0, 0.09)";
+      ctx.fillStyle = `rgba(${rgbStr}, 0.25)`; // Increased visibility for dots
       ctx.beginPath();
       ctx.arc(width * 0.22, height * 0.65, 3.5, 0, Math.PI * 2);
       ctx.fill();
@@ -179,7 +226,7 @@ function TechBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0"
+      className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
     />
   );
 }
