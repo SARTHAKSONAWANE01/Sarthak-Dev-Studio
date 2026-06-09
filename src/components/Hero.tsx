@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { useEffect, useState, useCallback } from "react";
+import { motion, Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 function getGreeting(): string {
@@ -11,11 +11,26 @@ function getGreeting(): string {
   return "Good Evening";
 }
 
+const roles = [
+  "Full Stack Developer.",
+  "Product Builder.",
+  "Problem Solver.",
+  "Future Founder.",
+];
+
 export default function Hero() {
   const [greeting, setGreeting] = useState("Hello");
+  const [roleIndex, setRoleIndex] = useState(0);
 
   useEffect(() => {
     setGreeting(getGreeting());
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % roles.length);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const containerVariants: Variants = {
@@ -41,32 +56,45 @@ export default function Hero() {
     },
   };
 
-  const textSecondaryVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
+  // Letter-by-letter animation for the headline
+  const headlineText = "I\u2019m Sarthak.";
+  const letterVariants: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (i: number) => ({
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
+        delay: 0.4 + i * 0.04,
+        duration: 0.6,
         ease: [0.16, 1, 0.3, 1],
       },
-    },
+    }),
   };
 
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col justify-center section-spacing"
+      className="min-h-screen flex flex-col justify-center section-spacing relative overflow-hidden"
     >
-      <div className="container-studio">
+      {/* Animated Grid Background */}
+      <div className="hero-grid-bg" aria-hidden="true" />
+
+      <div className="container-studio relative z-10">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {/* Section Index */}
-          <motion.div className="section-index" variants={itemVariants}>
-            01 — Introduction
+          {/* Availability Badge + Section Index */}
+          <motion.div
+            className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-8"
+            variants={itemVariants}
+          >
+            <div className="section-index !mb-0">01 — Introduction</div>
+            <div className="availability-badge">
+              <span className="availability-dot" />
+              Available for work
+            </div>
           </motion.div>
 
           {/* Greeting */}
@@ -78,29 +106,51 @@ export default function Hero() {
             {greeting}
           </motion.p>
 
-          {/* Main Headline */}
+          {/* Main Headline — letter-by-letter */}
           <div className="max-w-5xl">
             <motion.h1
-              className="text-display mb-8"
-              variants={itemVariants}
+              className="text-display mb-4"
+              initial="hidden"
+              animate="visible"
             >
-              I&rsquo;m Sarthak.
+              {headlineText.split("").map((letter, i) => (
+                <motion.span
+                  key={i}
+                  custom={i}
+                  variants={letterVariants}
+                  style={{ display: "inline-block" }}
+                >
+                  {letter === " " ? "\u00A0" : letter}
+                </motion.span>
+              ))}
             </motion.h1>
 
-            <motion.h2
-              className="text-display mb-8"
-              style={{ color: "var(--foreground-secondary)" }}
-              variants={textSecondaryVariants}
-            >
-              Full Stack Developer.
-            </motion.h2>
+            {/* Morphing Role Title */}
+            <div className="h-[1.1em] relative overflow-hidden mb-8" style={{ fontSize: "var(--text-display)" }}>
+              <AnimatePresence mode="wait">
+                <motion.h2
+                  key={roleIndex}
+                  className="text-display absolute top-0 left-0"
+                  style={{ color: "var(--foreground-secondary)" }}
+                  initial={{ y: 40, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -40, opacity: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  {roles[roleIndex]}
+                </motion.h2>
+              </AnimatePresence>
+            </div>
 
             <motion.p
               className="text-xl md:text-2xl max-w-2xl mb-12 leading-relaxed"
               style={{ color: "var(--foreground-muted)" }}
               variants={itemVariants}
             >
-              Building digital products from idea to deployment.
+              Building digital products from idea to deployment — where engineering meets design meets business thinking.
             </motion.p>
           </div>
 
@@ -144,6 +194,17 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="scroll-indicator hidden md:flex"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+      >
+        <span className="scroll-indicator-text">Scroll</span>
+        <span className="scroll-indicator-line" />
+      </motion.div>
     </section>
   );
 }

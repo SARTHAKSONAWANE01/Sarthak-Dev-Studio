@@ -5,6 +5,14 @@ import { motion } from "framer-motion";
 import { getTier1Projects } from "@/lib/projects";
 import RevealOnScroll from "@/components/RevealOnScroll";
 
+// Gradient thumbnails for each project (placeholder visuals)
+const projectGradients: Record<string, string> = {
+  grenomart: "linear-gradient(135deg, #0a0a0a 0%, #333 50%, #1a1a1a 100%)",
+  "sarthak-dev-studio": "linear-gradient(135deg, #222 0%, #555 50%, #111 100%)",
+  "gta6-landing-page": "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+  "client-project": "linear-gradient(135deg, #2d2d2d 0%, #4a4a4a 50%, #1a1a1a 100%)",
+};
+
 export default function SelectedWork() {
   const projects = getTier1Projects();
 
@@ -53,7 +61,7 @@ export default function SelectedWork() {
               <motion.div
                 initial="initial"
                 whileHover="hover"
-                className="group block cursor-pointer"
+                className="group block cursor-pointer project-row"
               >
                 <Link href={`/work/${project.slug}`}>
                   <motion.div
@@ -64,9 +72,16 @@ export default function SelectedWork() {
                     }}
                     transition={{ duration: 0.3 }}
                   />
-                  <div className="py-8 md:py-12 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="py-8 md:py-12 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 relative">
+                    {/* Project Number */}
+                    <div className="hidden md:block w-16 shrink-0">
+                      <span className="project-number">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+
                     {/* Left: Project Info */}
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <span
                         className="text-xs uppercase tracking-widest mb-2 block"
                         style={{ color: "var(--foreground-muted)" }}
@@ -74,15 +89,28 @@ export default function SelectedWork() {
                         {project.category}
                       </span>
                       <motion.h3
-                        className="text-2xl md:text-3xl font-serif"
+                        className="text-2xl md:text-3xl font-serif mb-3"
                         variants={{
-                          initial: { x: 0, color: "var(--foreground)" },
-                          hover: { x: 8, color: "var(--foreground)" },
+                          initial: { x: 0 },
+                          hover: { x: 8 },
                         }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       >
                         {project.title}
                       </motion.h3>
+                      {/* Tech Tags */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.techStack.slice(0, 4).map((tech) => (
+                          <span key={tech} className="tech-tag">
+                            {tech}
+                          </span>
+                        ))}
+                        {project.techStack.length > 4 && (
+                          <span className="tech-tag">
+                            +{project.techStack.length - 4}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Center: Outcome */}
@@ -93,8 +121,27 @@ export default function SelectedWork() {
                       {project.shortOutcome}
                     </p>
 
-                    {/* Right: Arrow */}
-                    <div className="flex items-center">
+                    {/* Right: Thumbnail + Arrow */}
+                    <div className="flex items-center gap-4">
+                      {/* Hover Thumbnail Preview */}
+                      <motion.div
+                        className="hidden lg:block w-24 h-16 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          background: projectGradients[project.slug] || "var(--color-grey-100)",
+                        }}
+                        variants={{
+                          initial: { scale: 0.9, opacity: 0 },
+                          hover: { scale: 1, opacity: 1 },
+                        }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-white/30 text-xs font-sans uppercase tracking-widest">
+                            Preview
+                          </span>
+                        </div>
+                      </motion.div>
+
                       <motion.svg
                         width="24"
                         height="24"

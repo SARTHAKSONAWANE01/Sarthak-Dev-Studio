@@ -265,6 +265,14 @@
   font-style: italic;
 }
 
+/* Gradient text utility — monochrome grey gradient */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-black) 0%, var(--color-grey-500) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* ============================================================
    EDITORIAL INDEX NUMBERING — Brand Motif
    ============================================================ */
@@ -327,12 +335,14 @@
   border: 1px solid var(--color-black);
   cursor: pointer;
   transition: all var(--duration-normal) var(--ease-out-expo);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .btn-primary:hover {
   background-color: transparent;
   color: var(--color-black);
   transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 }
 
 .btn-secondary {
@@ -356,6 +366,7 @@
   border-color: var(--color-black);
   background-color: var(--color-grey-50);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
 /* ============================================================
@@ -414,13 +425,14 @@ textarea {
   color: var(--foreground);
   padding: 14px 16px;
   width: 100%;
-  transition: border-color var(--duration-fast) ease;
+  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
 }
 
 input:focus,
 textarea:focus {
   outline: none;
   border-color: var(--foreground);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.04);
 }
 
 input::placeholder,
@@ -435,11 +447,505 @@ textarea::placeholder {
 .card-editorial {
   border: 1px solid var(--border-color);
   padding: 32px;
-  transition: border-color var(--duration-normal) var(--ease-out-expo);
+  transition: all var(--duration-normal) var(--ease-out-expo);
 }
 
 .card-editorial:hover {
   border-color: var(--foreground-secondary);
+}
+
+/* Card hover lift — premium depth effect */
+.card-hover-lift {
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  border-color: var(--color-grey-300);
+}
+
+/* ============================================================
+   HERO GRID BACKGROUND PATTERN
+   ============================================================ */
+
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(var(--color-grey-100) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grey-100) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
+  opacity: 0.7;
+  animation: gridDrift 20s linear infinite;
+}
+
+@keyframes gridDrift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, 60px); }
+}
+
+/* ============================================================
+   AVAILABILITY BADGE
+   ============================================================ */
+
+.availability-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid var(--color-grey-200);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--foreground-secondary);
+  background: var(--color-white);
+}
+
+.availability-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  animation: availPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+}
+
+@keyframes availPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.3); }
+}
+
+/* ============================================================
+   SCROLL INDICATOR
+   ============================================================ */
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+.scroll-indicator-text {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--foreground-muted);
+}
+
+.scroll-indicator-line {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, var(--color-grey-400), transparent);
+  animation: lineGrow 2s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+@keyframes lineGrow {
+  0% { height: 0; opacity: 0; }
+  50% { height: 32px; opacity: 1; }
+  100% { height: 32px; opacity: 0; }
+}
+
+/* ============================================================
+   TECH MARQUEE
+   ============================================================ */
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marquee-container::before,
+.marquee-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-container::before {
+  left: 0;
+  background: linear-gradient(to right, var(--background), transparent);
+}
+
+.marquee-container::after {
+  right: 0;
+  background: linear-gradient(to left, var(--background), transparent);
+}
+
+.marquee-track {
+  display: inline-flex;
+  animation: marqueeScroll 30s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--foreground-secondary);
+  white-space: nowrap;
+  border-right: 1px solid var(--border-subtle);
+  transition: color var(--duration-fast) ease;
+}
+
+.marquee-item:hover {
+  color: var(--foreground);
+}
+
+/* ============================================================
+   PROJECT ROW ENHANCED HOVER
+   ============================================================ */
+
+.project-row {
+  position: relative;
+  transition: background-color var(--duration-normal) ease;
+}
+
+.project-row:hover {
+  background-color: var(--color-grey-50);
+}
+
+.project-number {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  color: var(--color-grey-100);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  transition: color var(--duration-normal) ease;
+  user-select: none;
+}
+
+.project-row:hover .project-number {
+  color: var(--color-grey-200);
+}
+
+/* Tech tag pills */
+.tech-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--foreground-muted);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--duration-fast) ease;
+}
+
+.project-row:hover .tech-tag {
+  border-color: var(--color-grey-300);
+  color: var(--foreground-secondary);
+}
+
+/* ============================================================
+   CAPABILITY ITEM HOVER
+   ============================================================ */
+
+.capability-item {
+  position: relative;
+  padding: 6px 0;
+  transition: all var(--duration-fast) ease;
+  cursor: default;
+}
+
+.capability-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-grey-300);
+  transition: width var(--duration-normal) var(--ease-out-expo);
+}
+
+.capability-item:hover::after {
+  width: 100%;
+}
+
+.capability-item:hover {
+  color: var(--foreground) !important;
+  padding-left: 8px;
+}
+
+/* ============================================================
+   STATUS DOTS
+   ============================================================ */
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot-active {
+  background-color: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+  animation: availPulse 2s ease-in-out infinite;
+}
+
+.status-dot-research {
+  background-color: #f59e0b;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.3);
+}
+
+.status-dot-learning {
+  background-color: #3b82f6;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+}
+
+/* ============================================================
+   PHILOSOPHY DECORATIVE
+   ============================================================ */
+
+.philosophy-quote-mark {
+  font-family: var(--font-serif);
+  font-size: clamp(4rem, 8vw, 8rem);
+  color: var(--color-grey-100);
+  line-height: 0.8;
+  position: absolute;
+  top: -10px;
+  left: -8px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.philosophy-card {
+  position: relative;
+  border-left: 2px solid var(--color-grey-200);
+  padding-left: 24px;
+  transition: border-color var(--duration-normal) ease;
+}
+
+.philosophy-card:hover {
+  border-left-color: var(--color-grey-500);
+}
+
+.philosophy-number {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--foreground-muted);
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   BACK TO TOP BUTTON
+   ============================================================ */
+
+.back-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--foreground-muted);
+  border: 1px solid var(--border-color);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.back-to-top:hover {
+  color: var(--foreground);
+  border-color: var(--foreground);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   WORK PAGE PROJECT CARD
+   ============================================================ */
+
+.project-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .project-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.project-card-enhanced {
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card-enhanced:hover {
+  border-color: var(--color-grey-400);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+}
+
+.project-card-thumb {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Category filter tabs */
+.filter-tab {
+  padding: 6px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--foreground-muted);
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+}
+
+.filter-tab:hover {
+  color: var(--foreground);
+}
+
+.filter-tab-active {
+  color: var(--foreground);
+  border-color: var(--foreground);
+  background: var(--color-grey-50);
+}
+
+/* ============================================================
+   ROLE CARD 3D TILT
+   ============================================================ */
+
+.role-card {
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  text-align: center;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+  background: var(--color-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, var(--color-grey-50) 100%);
+  opacity: 0;
+  transition: opacity var(--duration-normal) ease;
+}
+
+.role-card:hover::before {
+  opacity: 1;
+}
+
+.role-card:hover {
+  border-color: var(--color-grey-400);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.06);
+}
+
+.role-card-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 16px;
+  color: var(--foreground-muted);
+  transition: color var(--duration-fast) ease;
+}
+
+.role-card:hover .role-card-icon {
+  color: var(--foreground);
+}
+
+/* ============================================================
+   ANIMATED LINE SEPARATOR
+   ============================================================ */
+
+.animated-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-grey-300) 20%,
+    var(--color-grey-500) 50%,
+    var(--color-grey-300) 80%,
+    transparent 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-divider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-white) 50%,
+    transparent 100%
+  );
+  animation: shimmerLine 3s ease-in-out infinite;
+}
+
+@keyframes shimmerLine {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 
 /* ============================================================
