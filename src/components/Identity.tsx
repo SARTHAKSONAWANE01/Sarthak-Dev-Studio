@@ -134,9 +134,6 @@ export default function Identity() {
           </div>
         </RevealOnScroll>
 
-        <RevealOnScroll delay={0.7}>
-          <div className="divider mt-16 md:mt-24" />
-        </RevealOnScroll>
       </div>
     </section>
   );

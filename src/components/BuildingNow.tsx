@@ -5,36 +5,32 @@ import { motion } from "framer-motion";
 
 const currentProjects = [
   {
-    name: "Grenomart",
-    description: "Full-stack e-commerce platform with payment integration and admin dashboard.",
+    name: "UdyamEdge",
+    description: "Incubator & accelerator program flow implementation, evaluation management, and funding systems.",
     status: "In Development",
     statusType: "active" as const,
-    progress: 75,
     updated: "This week",
   },
   {
-    name: "Portfolio V2",
-    description: "This website. A premium editorial platform built on Next.js 16.",
-    status: "Ongoing",
+    name: "Grenomart",
+    description: "Full-stack e-commerce engine with inventory pipelines, secure auth, and Stripe integration.",
+    status: "Active Development",
     statusType: "active" as const,
-    progress: 85,
     updated: "Today",
   },
   {
-    name: "AI Experiments",
-    description: "Exploring LLM integration patterns, prompt engineering, and AI-powered tooling.",
-    status: "Research",
-    statusType: "research" as const,
-    progress: 30,
-    updated: "Last week",
+    name: "Rai by Rai Advisory",
+    description: "Fiduciary-grade Indian real estate investment portal & wealth advisory showcase.",
+    status: "Ongoing Refinement",
+    statusType: "active" as const,
+    updated: "This week",
   },
   {
-    name: "Startup Research",
-    description: "Studying product-market fit, business models, and founder frameworks.",
-    status: "Learning",
-    statusType: "learning" as const,
-    progress: 40,
-    updated: "Ongoing",
+    name: "BitDevXp",
+    description: "Startup MVP consulting platform featuring Zod form sanitizers and high-performance TanStack SSR.",
+    status: "Active Refactoring",
+    statusType: "active" as const,
+    updated: "Yesterday",
   },
 ];
 
@@ -122,9 +118,6 @@ export default function BuildingNow() {
           ))}
         </div>
 
-        <RevealOnScroll delay={0.6}>
-          <div className="divider mt-16 md:mt-24" />
-        </RevealOnScroll>
       </div>
     </section>
   );

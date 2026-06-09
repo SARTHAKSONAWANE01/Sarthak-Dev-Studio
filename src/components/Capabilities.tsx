@@ -95,9 +95,6 @@ export default function Capabilities() {
           ))}
         </div>
 
-        <RevealOnScroll delay={0.6}>
-          <div className="divider mt-16 md:mt-24" />
-        </RevealOnScroll>
       </div>
     </section>
   );

@@ -75,9 +75,6 @@ export default function Philosophy() {
           ))}
         </div>
 
-        <RevealOnScroll delay={0.6}>
-          <div className="divider mt-8 md:mt-12" />
-        </RevealOnScroll>
       </div>
     </section>
   );

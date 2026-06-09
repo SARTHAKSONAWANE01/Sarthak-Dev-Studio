@@ -162,8 +162,13 @@ export default function Hero() {
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 450, damping: 15 }}
             >
-              <Link href="/work" className="btn-primary w-full justify-center">
-                <span>View Work</span>
+              <a
+                href="https://www.linkedin.com/in/sarthak-sonawane-0aa583344"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary w-full sm:w-auto inline-flex justify-center items-center gap-2"
+              >
+                <span>Let&rsquo;s Connect</span>
                 <svg
                   width="14"
                   height="14"
@@ -174,20 +179,11 @@ export default function Hero() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                  <rect width="4" height="12" x="2" y="9" />
+                  <circle cx="4" cy="4" r="2" />
                 </svg>
-              </Link>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ y: -3, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 450, damping: 15 }}
-            >
-              <Link href="/contact" className="btn-secondary w-full justify-center">
-                Let&rsquo;s Connect
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
         </motion.div>

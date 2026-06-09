@@ -127,9 +127,6 @@ export default function Proof() {
           ))}
         </div>
 
-        <RevealOnScroll delay={0.7}>
-          <div className="divider mt-16 md:mt-24" />
-        </RevealOnScroll>
       </div>
     </section>
   );

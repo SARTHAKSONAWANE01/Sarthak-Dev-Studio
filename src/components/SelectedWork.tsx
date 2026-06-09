@@ -14,6 +14,7 @@ const projectGradients: Record<string, string> = {
   bitdevxp: "linear-gradient(135deg, #121212 0%, #333 50%, #1a1a1a 100%)",
   raibyrai: "linear-gradient(135deg, #222 0%, #444 50%, #111 100%)",
   udyamedge: "linear-gradient(135deg, #0d0d0d 0%, #292929 50%, #111 100%)",
+  "ankitas-studio": "linear-gradient(135deg, #1f1a24 0%, #332a3d 50%, #17121c 100%)",
 };
 
 const projectImages: Record<string, string> = {
@@ -21,6 +22,7 @@ const projectImages: Record<string, string> = {
   bitdevxp: "/projects/bitdevxp.png",
   raibyrai: "/projects/raibyrai.png",
   udyamedge: "/projects/udyamedge.png",
+  "ankitas-studio": "/projects/ankitas-studio.png",
   "gta6-landing-page": "/projects/gta6.png",
   "sarthak-dev-studio": "/projects/portfolio.png",
 };
