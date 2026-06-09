@@ -28,22 +28,20 @@ export default function Footer() {
   };
 
   return (
-    <footer className="section-spacing" style={{ paddingTop: "clamp(40px, 6vw, 80px)" }}>
+    <footer className="w-full bg-black text-white py-16 md:py-24 border-t border-white/10 mt-auto">
       <div className="container-studio">
-        <div className="divider mb-12" />
-
         <div className="grid md:grid-cols-4 gap-12 md:gap-16">
           {/* Brand */}
           <div className="md:col-span-2">
-            <h3 className="font-serif text-2xl mb-2">Sarthak Dev Studio</h3>
-            <p className="text-sm" style={{ color: "var(--foreground-muted)" }}>
+            <h3 className="font-serif text-3xl mb-3 text-white">Sarthak Dev Studio</h3>
+            <p className="text-sm text-neutral-400">
               Full Stack Developer & Product Builder
             </p>
-            <p className="text-sm mt-1" style={{ color: "var(--foreground-muted)" }}>
+            <p className="text-sm mt-1 text-neutral-400">
               Focusing on engineering, user experience, and startup ideas.
             </p>
             {time && (
-              <p className="text-xs mt-6 font-mono" style={{ color: "var(--foreground-muted)" }}>
+              <p className="text-xs mt-6 font-mono text-neutral-500">
                 IST — {time}
               </p>
             )}
@@ -52,8 +50,7 @@ export default function Footer() {
           {/* Links */}
           <div>
             <h4
-              className="font-sans text-xs uppercase tracking-widest mb-4"
-              style={{ color: "var(--foreground-muted)" }}
+              className="font-sans text-xs uppercase tracking-widest mb-4 text-neutral-500"
             >
               Links
             </h4>
@@ -68,8 +65,7 @@ export default function Footer() {
                   href={link.href}
                   target={link.href.startsWith("http") ? "_blank" : undefined}
                   rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="block text-sm hover:opacity-60 transition-opacity"
-                  style={{ color: "var(--foreground-secondary)" }}
+                  className="block text-sm text-neutral-300 hover:text-white transition-colors"
                 >
                   {link.label}
                 </a>
@@ -80,16 +76,18 @@ export default function Footer() {
           {/* Currently Building */}
           <div>
             <h4
-              className="font-sans text-xs uppercase tracking-widest mb-4"
-              style={{ color: "var(--foreground-muted)" }}
+              className="font-sans text-xs uppercase tracking-widest mb-4 text-neutral-500"
             >
               Currently Building
             </h4>
             <div className="space-y-2">
-              <p className="text-sm" style={{ color: "var(--foreground-secondary)" }}>
+              <p className="text-sm text-neutral-300">
                 Grenomart
               </p>
-              <p className="text-sm" style={{ color: "var(--foreground-secondary)" }}>
+              <p className="text-sm text-neutral-300">
+                UdyamEdge
+              </p>
+              <p className="text-sm text-neutral-300">
                 Portfolio V2
               </p>
             </div>
@@ -97,16 +95,14 @@ export default function Footer() {
         </div>
 
         {/* Copyright & Back to Top */}
-        <div className="divider mt-16 mb-6" />
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="text-xs" style={{ color: "var(--foreground-muted)" }}>
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <p className="text-xs text-neutral-500">
             &copy; {currentYear} Sarthak Dev Studio. All rights reserved.
           </p>
           
           <button
             onClick={scrollToTop}
-            className="group flex items-center justify-center w-8 h-8 rounded-full border border-foreground/10 hover:border-foreground/30 hover:text-foreground transition-all duration-300"
-            style={{ color: "var(--foreground-muted)" }}
+            className="group flex items-center justify-center w-10 h-10 rounded-full border border-white/10 hover:border-white/30 text-neutral-400 hover:text-white bg-white/5 transition-all duration-300"
             aria-label="Back to Top"
           >
             <svg
