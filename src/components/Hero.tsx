@@ -277,9 +277,11 @@ function WorksPreviewStack() {
     },
   ]);
 
-  const handleShuffle = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleShuffle = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setProjects((prev) => {
       const next = [...prev];
       const topCard = next.pop(); // Take the top card (last element)
@@ -289,6 +291,15 @@ function WorksPreviewStack() {
       return next;
     });
   }, []);
+
+  // Auto-shuffle stack every 4 seconds when stack is not hovered
+  useEffect(() => {
+    if (isStackHovered) return;
+    const interval = setInterval(() => {
+      handleShuffle();
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isStackHovered, handleShuffle]);
 
   const handleCardClick = (idx: number, e: React.MouseEvent) => {
     const isTop = idx === projects.length - 1;
@@ -308,7 +319,7 @@ function WorksPreviewStack() {
   return (
     <div className="flex flex-col items-center w-full">
       <div
-        className="relative w-full aspect-[4/3] sm:aspect-[16/11] max-w-[440px] md:max-w-[480px] lg:max-w-[460px] xl:max-w-[500px] h-[320px] sm:h-[360px] flex items-center justify-center cursor-pointer select-none"
+        className="relative w-full aspect-[4/3] sm:aspect-[16/11] max-w-[480px] md:max-w-[530px] lg:max-w-[500px] xl:max-w-[560px] h-[340px] sm:h-[380px] lg:h-[400px] flex items-center justify-center cursor-pointer select-none"
         onMouseEnter={() => setIsStackHovered(true)}
         onMouseLeave={() => {
           setIsStackHovered(false);
@@ -328,7 +339,7 @@ function WorksPreviewStack() {
           if (isStackHovered) {
             const factor = idx - (total - 1) / 2;
             rot = factor * 7;
-            x = factor * 35;
+            x = factor * 40;
             y = -10;
           }
 
@@ -344,7 +355,7 @@ function WorksPreviewStack() {
             <motion.div
               key={project.title}
               onClick={(e) => handleCardClick(idx, e)}
-              className="absolute w-[82%] aspect-[1.5] bg-white rounded-lg border border-foreground/10 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.12)] transition-shadow duration-500 group"
+              className="absolute w-[88%] aspect-[1.5] bg-white rounded-lg border border-foreground/10 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.12)] transition-shadow duration-500 group"
               style={{ originX: 0.5, originY: 0.5 }}
               animate={{
                 rotate: rot,
@@ -446,7 +457,7 @@ function WorksPreviewStack() {
 
         {/* Shuffle Floating Action Button */}
         <motion.button
-          onClick={handleShuffle}
+          onClick={(e) => handleShuffle(e)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="absolute bottom-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[9px] font-mono rounded-full border border-white/20 shadow-lg cursor-pointer hover:bg-neutral-900 transition-colors uppercase tracking-wider"
@@ -617,37 +628,7 @@ export default function Hero() {
                 </motion.p>
               </div>
 
-              {/* CTAs - Connect Button */}
-              <motion.div
-                className="flex flex-col sm:flex-row gap-4"
-                variants={itemVariants}
-              >
-                <motion.div
-                  whileHover={{ y: -3, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 450, damping: 15 }}
-                >
-                  <Link
-                    href="/connect"
-                    className="btn-primary w-full sm:w-auto inline-flex justify-center items-center gap-2 cursor-pointer"
-                  >
-                    <span>Let&rsquo;s Connect</span>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="22" y1="2" x2="11" y2="13" />
-                      <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                    </svg>
-                  </Link>
-                </motion.div>
-              </motion.div>
+
             </motion.div>
           </div>
 
