@@ -12,10 +12,10 @@ function getGreeting(): string {
 }
 
 const roles = [
-  "Digital Product Studio.",
-  "Engineering & Design.",
-  "Idea to Deployment.",
-  "Startup Growth Partners.",
+  "Full Stack Developer.",
+  "Product Builder.",
+  "Problem Solver.",
+  "Future Founder.",
 ];
 
 function TechBackground() {
@@ -393,7 +393,7 @@ function WorksPreviewStack() {
   return (
     <div className="flex flex-col items-center w-full">
       <div
-        className="relative w-full aspect-[4/3] sm:aspect-[16/11] max-w-[480px] md:max-w-[530px] lg:max-w-[500px] xl:max-w-[560px] h-[340px] sm:h-[380px] lg:h-[400px] flex items-center justify-center cursor-pointer select-none"
+        className="relative w-full aspect-[4/3] sm:aspect-[16/11] max-w-[520px] md:max-w-[580px] lg:max-w-[550px] xl:max-w-[620px] h-[360px] sm:h-[420px] lg:h-[450px] flex items-center justify-center cursor-pointer select-none"
         onMouseEnter={() => setIsStackHovered(true)}
         onMouseLeave={() => {
           setIsStackHovered(false);
@@ -414,7 +414,7 @@ function WorksPreviewStack() {
           return (
             <motion.div
               key={project.title}
-              className="absolute w-[88%] aspect-[1.5] bg-white rounded-lg border border-foreground/10 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
+              className="absolute w-[92%] aspect-[1.5] bg-white rounded-lg border border-foreground/10 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
               style={{ originX: 0.5, originY: 0.5 }}
               animate={{
                 rotate: rot,
@@ -676,7 +676,12 @@ function WorksPreviewStack() {
 }
 
 export default function Hero() {
+  const [greeting, setGreeting] = useState("Hello");
   const [roleIndex, setRoleIndex] = useState(0);
+
+  useEffect(() => {
+    setGreeting(getGreeting());
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -709,7 +714,7 @@ export default function Hero() {
   };
 
   // Letter-by-letter animation for the headline
-  const headlineText = "Sarthak Dev Studio.";
+  const headlineText = "I\u2019m Sarthak.";
   const letterVariants: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -751,6 +756,15 @@ export default function Hero() {
                 <div className="section-index !mb-0">01 — Introduction</div>
                 <span className="text-xs uppercase tracking-widest font-mono opacity-40">Sarthak Dev Studio</span>
               </motion.div>
+
+              {/* Greeting */}
+              <motion.p
+                className="text-base md:text-lg mb-6 font-mono opacity-80"
+                style={{ color: "var(--foreground-secondary)" }}
+                variants={itemVariants}
+              >
+                {greeting}
+              </motion.p>
 
               {/* Main Headline — letter-by-letter with depth */}
               <div className="max-w-6xl">
@@ -796,7 +810,7 @@ export default function Hero() {
                   style={{ color: "var(--foreground-muted)" }}
                   variants={itemVariants}
                 >
-                  We build premium digital products from idea to deployment — where engineering meets design meets business thinking.
+                  Building digital products from idea to deployment — where engineering meets design meets business thinking.
                 </motion.p>
               </div>
 
@@ -805,8 +819,35 @@ export default function Hero() {
           </div>
 
           {/* Right Column: Interactive Works Previews */}
-          <div className="lg:col-span-5 relative w-full flex justify-center items-center mt-12 lg:mt-0">
+          <div className="lg:col-span-5 relative w-full flex flex-col items-center justify-center mt-12 lg:mt-0 gap-6">
             <WorksPreviewStack />
+            
+            {/* CTA Button Under Stack */}
+            <motion.div
+              variants={itemVariants}
+              className="z-10 mt-2"
+            >
+              <Link
+                href="/connect"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full border border-foreground/15 hover:border-foreground/35 bg-foreground text-background hover:bg-background hover:text-foreground transition-all duration-300 font-mono text-xs uppercase tracking-wider group shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] cursor-pointer"
+              >
+                <span>Let's Connect</span>
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </Link>
+            </motion.div>
           </div>
         </div>
       </div>
