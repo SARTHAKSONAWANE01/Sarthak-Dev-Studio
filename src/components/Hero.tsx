@@ -485,6 +485,107 @@ function WorksPreviewStack() {
           Click stack or button to shuffle
         </span>
       </div>
+
+      {/* Enlarged Focus Lightbox on Hover */}
+      <AnimatePresence>
+        {hoveredIndex !== null && (
+          <>
+            {/* Blurry Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/[0.15] backdrop-blur-[7px] z-40 pointer-events-none"
+              transition={{ duration: 0.25 }}
+            />
+            
+            {/* Centered Enlarged Image Card (pointer-events-none allows clicks to pass through to stack card link!) */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, x: "-50%", y: "-45%" }}
+              animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+              exit={{ opacity: 0, scale: 0.9, x: "-50%", y: "-45%" }}
+              transition={{ type: "spring", stiffness: 320, damping: 24 }}
+              className="fixed top-1/2 left-1/2 w-[90vw] max-w-[760px] aspect-[1.5] bg-white rounded-xl border border-foreground/10 overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.18)] z-50 pointer-events-none select-none"
+            >
+              {projects[hoveredIndex].isConnectCard ? (
+                <div className="w-full h-full bg-black text-white flex flex-col justify-between p-8 sm:p-12 font-mono relative overflow-hidden">
+                  {/* Blueprint background grid */}
+                  <div className="absolute inset-0 opacity-15 bg-[linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:30px_30px]" />
+                  
+                  {/* Card Header */}
+                  <div className="flex justify-between items-center z-10 border-b border-white/10 pb-4">
+                    <span className="text-2xs uppercase tracking-widest text-white/50">Collab — Request</span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+                  </div>
+
+                  {/* Card Center */}
+                  <div className="my-auto z-10 flex flex-col gap-3">
+                    <h4 className="font-serif text-4xl sm:text-5xl text-white tracking-tight leading-none">
+                      Your Project Next?
+                    </h4>
+                    <p className="text-xs sm:text-sm text-neutral-400 font-mono leading-relaxed max-w-sm">
+                      Let's collaborate to build high-performance products. Open to contract roles & product advisory.
+                    </p>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="z-10 flex justify-between items-center border-t border-white/10 pt-4">
+                    <span className="text-xs uppercase tracking-widest text-white/50">Click to connect</span>
+                    <div className="px-3 py-1 border border-white/20 rounded text-xs bg-white/5 text-white">
+                      INQUIRY.EXE
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full h-full relative">
+                  {/* Browser Header Bar */}
+                  <div className="absolute top-0 left-0 right-0 h-8 bg-neutral-100 border-b border-foreground/5 flex items-center px-4 gap-2 justify-between">
+                    <div className="flex gap-1.5">
+                      <div className="w-2 h-2 rounded-full bg-neutral-300" />
+                      <div className="w-2 h-2 rounded-full bg-neutral-300" />
+                      <div className="w-2 h-2 rounded-full bg-neutral-300" />
+                    </div>
+                    <div className="text-[10px] font-mono text-neutral-400 tracking-wider">
+                      {projects[hoveredIndex].title.toLowerCase().replace("'", "").replace(" ", "")}.com
+                    </div>
+                    <div className="w-4" />
+                  </div>
+                  {/* Screenshot Container */}
+                  <div className="absolute inset-0 mt-8 w-full h-[calc(100%-32px)] bg-neutral-50">
+                    <img
+                      src={projects[hoveredIndex].image}
+                      alt={projects[hoveredIndex].title}
+                      className="w-full h-full object-cover"
+                    />
+                    
+                    {/* Information Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-6 sm:p-8 text-white">
+                      <span className="text-xs font-mono text-white/70 uppercase tracking-widest mb-1">
+                        {projects[hoveredIndex].category}
+                      </span>
+                      <h4 className="font-serif text-2xl sm:text-3xl leading-tight flex items-center gap-2">
+                        <span>{projects[hoveredIndex].title}</span>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
+                        </svg>
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
